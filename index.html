@@ -142,6 +142,8 @@ svg{display:block;flex:none}
 .ownrow{display:flex;gap:8px}
 .ownrow input{flex:1;min-width:0;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font:500 15px var(--body);background:var(--bg);color:var(--ink)}
 .ownrow .btn{width:auto}
+
+.ep{font-size:13px;color:var(--gold);font-weight:600;margin:0 0 6px}
 </style>
 </head><body>
 <div id="app"><div class="hero"><div class="brand big">Line<b>by</b>Line</div><h1>Загрузка…</h1><p id="err" class="note"></p></div></div>
@@ -905,6 +907,68 @@ SC=SC.concat([
 ]);
 Object.assign(VIDS,{rk1:["bDSe0K5nN2s",1],si1:["0WXJD4OKl8o",1],av1:["4Uo4wJoIuIA",1],bb1:["Ca3kPemW2CE",1],gt1:["E9wAk6BNIYI",1],pr1:["E2sFXRKAUP0",1],ne1:["bEupAWRx_4s",1],fz1:["wfY4hOcjV_o",1],up1:["HB-RQdZI024",1],lk1:["lpxEWaScakM",1],rt1:["thkDWSUzQDo",1],dm1:["NB1qppAPxk4",1],md1:["WA0UhYPpJT0",1],sh2:["basofea2UEs",1],tm1:["AchmyTXHPa4",1],fg1:["4pfFRYH4UPk",1],ti1:["RGYLarfJcmg",1],ca1:["IZnVoPw-fHw",1],dk1:["zeUsI-duhgc",1],mx1:["M95uj0dEgUY",1],bf1:["NhSC4C43wgc",1],zt1:["MmaWN58BeeQ",1],mn1:["LaiN63o_BxA",1],sd1:["-LRP3wRjqZk",1],pf1:["ZzesFIODxJs",1],nr1:["iCEIAlt5BHk",1],bn1:["xVshXzzm5eA",1],lt1:["kkTwNjyza_w",1]});
 
+SC=SC.filter(function(s){return ["at2","at3","at4","at5","at6","at7","at8"].indexOf(s.id)<0});
+SC.forEach(function(s){if(s.id==="at1"){s.ep="«His Hero», 1 сезон";s.note+=" В этой серии Финн восклицает: «That was the most mathematical thing ever!»"}});
+SC=SC.concat([
+{id:"at2",sh:"adv",who:"Джейк",lvl:"B1",q:1,ep:"«Evicted!», 1 сезон",ti:"Когда признаётесь, что выдумали",
+ sit:"Ночью в домике на дереве Джейк рассказывает Финну страшилку про вампиров. Финн трясётся от страха, а Джейк признаётся, что всё сочинил.",
+ line:"Relax, buddy. I made that story up.",ru:"Расслабься, дружище. Я эту историю выдумал.",
+ note:"Make up = «выдумать, сочинить» (made — прошедшее время). I made it up = «я это выдумал». Если дополнение — местоимение, оно стоит в середине: made it up.",
+ w:[["make up","выдумать"],["buddy","дружище"],["relax","расслабиться"]],yt:"Adventure Time Evicted Jake vampire story",
+ t:[["Вы напугали младшего брата рассказом о призраке в подвале",1,"Подходит: вы признаётесь, что выдумали."],["Вы рассказываете реальный случай из жизни",0,"Тогда это не выдумка."],["Вы объясняете урок истории",0,"Не по смыслу."]],
+ gp:["He ___ up an excuse to leave early.",["made","did","took"]]},
+{id:"at5",sh:"adv",who:"Финн",lvl:"B2",q:1,ep:"«Evicted!», 1 сезон",ti:"Когда не верите ни слову",
+ sit:"Финн понимает, что Джейк просто нёс чепуху, чтобы его напугать, и возмущается.",
+ line:"You're full of it, Jake!",ru:"Ты всё врёшь, Джейк!",
+ note:"Be full of it = «нести чушь, привирать». Разговорная и слегка грубоватая фраза: только для друзей.",
+ w:[["be full of it","нести чушь, врать"]],yt:"Adventure Time Evicted Finn Jake",
+ t:[["Друг клянётся, что вчера видел НЛО над школой",1,"Подходит: дружеское недоверие."],["Учитель объясняет новую тему",0,"Грубо по отношению к учителю."],["Вы благодарите за совет",0,"Противоречит смыслу."]],
+ gp:["Don't believe him, he's full ___ it.",["of","with","in"]]},
+{id:"at3",sh:"adv",who:"Принцесса Бубльгум",lvl:"B1",q:1,ep:"«Dungeon», 1 сезон",ti:"Когда надеетесь, что урок усвоен",
+ sit:"Финн и Джейк ссорятся в подземелье, и их приходится спасать. После этого Принцесса Бубльгум их отчитывает.",
+ line:"I hope you learned a lesson from all this!",ru:"Надеюсь, вы извлекли из всего этого урок!",
+ note:"Learn a lesson = «извлечь урок». После I hope о прошлом — Past Simple: I hope you learned.",
+ w:[["learn a lesson","извлечь урок"],["hope","надеяться"]],yt:"Adventure Time Dungeon Princess Bubblegum lesson",
+ t:[["Младший брат съел три торта и теперь у него болит живот",1,"Подходит: вы надеетесь, что он сделал выводы."],["Вы поздравляете друга с победой",0,"Не по смыслу."],["Вы сами совершили ошибку",0,"Так говорят другому."]],
+ gp:["I hope you ___ your lesson.",["learned","learn","learning"]]},
+{id:"at4",sh:"adv",who:"Финн",lvl:"B1",q:1,ep:"«Dungeon», 1 сезон",ti:"Когда вам бросили вызов",
+ sit:"Финн хвастается, что в одиночку добудет кристальный глаз из подземелья. Джейк в ответ скептически хмыкает «Yeah, right», и Финн тут же предлагает поспорить.",
+ line:"You wanna bet I can't?",ru:"Хочешь поспорить, что не смогу?",
+ note:"Wanna = want to (разговорное). Bet = «спорить на что-то». Yeah, right — саркастичное «ага, конечно».",
+ w:[["wanna","want to (разг.)"],["bet","спорить"],["yeah, right","ага, конечно (сарказм)"]],yt:"Adventure Time Dungeon Finn Jake bet",
+ t:[["Друг смеётся, что вы не пробежите 5 км",1,"Подходит: вы принимаете вызов."],["Вы соглашаетесь, что не сможете",0,"Противоречит смыслу."],["Вы пишете официальное письмо",0,"Wanna — разговорное."]],
+ gp:["I ___ you can't do it!",["bet","bit","beat"]]},
+{id:"at6",sh:"adv",who:"Джейк",lvl:"B1",q:1,ep:"«His Hero», 1 сезон",ti:"Когда главное — начать",
+ sit:"Финн признаётся, что у него ничего не получается. Джейк объясняет, что неудача — часть обучения.",
+ line:"Dude, suckin' at somethin' is the first step towards bein' sorta good at somethin'.",ru:"Чувак, быть в чём-то отстоем — первый шаг к тому, чтобы стать в этом более-менее хорошим.",
+ note:"Suckin', somethin', bein' — разговорное произношение без звука g. Suck at = «быть ужасным в чём-то» (сленг). Sorta = sort of = «вроде, более-менее». После предлога towards — глагол с -ing.",
+ w:[["suck at","быть ужасным в (сленг)"],["sorta","более-менее (разг.)"],["towards","к, по направлению к"]],yt:"Adventure Time Jake sucking at something",
+ t:[["Друг расстроен, что плохо говорит по-английски на первом уроке",1,"Подходит: поддержка новичка."],["Вы хвалите профессионала",0,"Не по смыслу."],["Вы на собеседовании",0,"Сленг suck неуместен."]],
+ gp:["She is really good ___ drawing.",["at","in","on"]]},
+{id:"at7",sh:"adv",who:"Граф Лимонохват",lvl:"B1",q:1,ep:"несколько серий, впервые — «Too Young», 3 сезон",ti:"Когда что-то неприемлемо",
+ sit:"Граф Лимонохват визжит своё фирменное «неприемлемо!» по любому поводу, и это стало мемом.",
+ line:"Unacceptable!",ru:"Неприемлемо!",
+ note:"Приставка un- делает слово противоположным: acceptable → unacceptable, happy → unhappy.",
+ w:[["unacceptable","неприемлемый"],["acceptable","приемлемый"]],yt:"Adventure Time Lemongrab unacceptable",
+ t:[["Друг-фанат в шутку возмущается холодной пиццей",1,"Подходит как отсылка."],["Вы соглашаетесь с планом",0,"Противоречит смыслу."],["Вы извиняетесь",0,"Не по смыслу."]],
+ gp:["This answer is ___. Try again.",["unacceptable","inacceptable","disacceptable"]]},
+{id:"at8",sh:"adv",who:"Финн",lvl:"A2",q:1,ep:"«Time Sandwich», 4 сезон",ti:"Когда вы не сдаётесь",
+ sit:"Волшебник отнял у Джейка идеальный сэндвич и спрятал его в непробиваемой сфере. Друзья не могут помочь, но Финн отказывается сдаваться.",
+ line:"I am not giving up.",ru:"Я не сдамся.",
+ note:"Give up = «сдаться». Present Continuous здесь передаёт твёрдое решение. Never give up = «никогда не сдавайся».",
+ w:[["give up","сдаваться"]],yt:"Adventure Time Time Sandwich",
+ t:[["Вы трижды провалили тест, но готовитесь снова",1,"Подходит."],["Вы бросаете курс",0,"Противоречит смыслу."],["Вы хвалите друга",0,"Не по смыслу."]],
+ gp:["Never give ___!",["up","in","out"]]},
+{id:"at9",sh:"adv",who:"Финн",lvl:"B1",q:1,ep:"«Slumber Party Panic», 1 сезон",ti:"Когда у кого-то всё отлично получается",
+ sit:"Конфетные жители с завязанными глазами крушат зомби, думая, что бьют пиньяты. Финн их подбадривает.",
+ line:"Yeah! You guys are on fire!",ru:"Да! Вы в ударе!",
+ note:"Be on fire в переносном смысле = «быть в ударе», когда всё отлично получается. Буквально — «гореть». You guys = «вы, ребята».",
+ w:[["be on fire","быть в ударе"],["you guys","вы, ребята"]],yt:"Adventure Time Slumber Party Panic",
+ t:[["Ваша команда забивает третий гол подряд",1,"Подходит."],["Дом реально горит",0,"Тогда это не похвала, а беда: Call 101!"],["Команда проигрывает",0,"Противоречит смыслу."]],
+ gp:["You're ___ fire today!",["on","in","at"]]}
+]);
+Object.assign(VIDS,{at2:["Qoa5EZtvu2c",2],at5:["Qoa5EZtvu2c",2],at3:["jm7kq6tN6bc",2],at4:["jm7kq6tN6bc",2],at6:["5MiEkj9grcQ",1],at7:["167jfk6yLzk",0],at8:["Y3Reh0AaZ6Q",2],at9:["cr45cpZXpUk",2]});
+
 var IC={
  flame:'<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--flame)"><path d="M12 2c1 3.5 5 5.6 5 10.5A5 5 0 0 1 12 22a5 5 0 0 1-5-5c0-2.6 1.5-4 2.5-5.5.3 1.6 1 2.5 2 2.8C11 11 11 6 12 2z"/></svg>',
  bolt:'<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--gold)"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
@@ -1002,7 +1066,7 @@ function withAPI(cb){if(apiState===2&&window.YT&&YT.Player)return cb();apiQueue.
 function playerHTML(s){
  var f=vidFor(s),h="";
  if(f&&!SANDBOX){
-  h='<div class="pwrap" id="pw"><button class="pstart" id="pst" style="--c1:'+SHOWS[s.sh].c[0]+';--c2:'+SHOWS[s.sh].c[1]+'"><span class="pbig">'+IC.play+'</span><span>Смотреть сцену</span><span class="note2">'+(f.own?"Ваше видео":"")+(f.t?" с "+fmtT(f.t):" с начала ролика")+"</span></button></div>"+
+  h='<div class="pwrap" id="pw"><button class="pstart" id="pst" style="--c1:'+SHOWS[s.sh].c[0]+';--c2:'+SHOWS[s.sh].c[1]+'"><span class="pbig">'+IC.play+'</span><span>Смотреть сцену</span><span class="note2">'+(f.own?"Ваше видео":f.exact===1?"Ролик с этой репликой":f.exact===2?"Клип из этой серии — реплика может быть в другой части":"Подборка моментов")+(f.t?" · с "+fmtT(f.t):"")+"</span></button></div>"+
   '<div class="pctl"><button class="btn ghost small" id="mk" disabled>Момент начинается здесь</button><a class="ytl" href="'+yt(s)+'" target="_blank" rel="noopener">Открыть на YouTube '+IC.ext+'</a></div><p class="note" id="mknote">'+(S.marks[s.id]!=null?"Сохранённое начало: "+fmtT(S.marks[s.id])+".":"Запустите видео и нажмите кнопку там, где начинается сцена: в следующий раз ролик откроется с этого места, с запасом 4 секунды для контекста.")+"</p>";
  }else{
   h=thumb(s,true)+'<a class="ytb" href="'+yt(s)+'" target="_blank" rel="noopener">'+IC.play+"<span>"+(f?"Смотреть на YouTube"+(f.t?" с "+fmtT(f.t):""):"Найти сцену на YouTube")+"</span>"+IC.ext+"</a>"+(f&&SANDBOX?'<p class="note" style="margin-top:8px">Внутри Claude плеер заблокирован. На вашем сайте GitHub Pages видео играет прямо здесь.</p>':"");
@@ -1029,7 +1093,7 @@ function scene(id){
  function svIcon(){var b=$("#sv");b.innerHTML=S.saved[s.id]?IC.saved:IC.save;b.classList.toggle("on",!!S.saved[s.id])}
  function render(){
   var solved=st.t1!=null&&st.t2!=null,film=["hp","shrek","toy","lotr","spider","panda","sw","pirates","nemo","frozen","up","lion","rata","desp","mad","term","gump","titanic","cap","dk","matrix","bttf","zoo"].indexOf(s.sh)>=0;
-  $("#sbody").innerHTML='<div class="sec"><div class="tlabel">Сцена · '+esc(s.who)+'</div><p class="sit">'+esc(s.sit)+"</p></div>"+
+  $("#sbody").innerHTML='<div class="sec"><div class="tlabel">Сцена · '+esc(s.who)+'</div>'+(s.ep?'<p class="ep">Серия: '+esc(s.ep)+(s.sh==="adv"&&s.q?' · реплика сверена с расшифровкой на Adventure Time Wiki':'')+'</p>':'')+'<p class="sit">'+esc(s.sit)+"</p></div>"+
   '<div class="linebox"><div class="ltag">'+(s.q?"Цитата из "+(film?"фильма":s.id==="wi1"?"игры":"сериала"):"Фраза для урока в духе сцены")+'</div><div class="lline" lang="en">'+esc(s.line)+'</div><div class="lctl">'+(canSpeak?'<button class="mini" id="sp" aria-label="Прослушать">'+IC.spk+'</button><button class="mini" id="sps" aria-label="Медленно">'+IC.slow+"</button>":"")+'<button class="lnk" id="trb">'+(st.tr?"Скрыть перевод":"Показать перевод")+'</button></div><div class="ltr" '+(st.tr?"":"hidden")+">"+esc(s.ru)+"</div></div>"+
   '<div class="sec"><div class="tlabel">Разбор</div><p>'+esc(s.note)+'</p><div class="gl">'+s.w.map(function(w){return '<div class="gr"><span lang="en">'+esc(w[0])+"</span><span>"+esc(w[1])+"</span></div>"}).join("")+"</div></div>"+
   '<div class="sec"><div class="tlabel">Задача 1 · Где это уместно?</div><p class="qq">В какой ситуации эту фразу естественно сказать?</p><div class="opts">'+opts1.map(function(o,k){var cls="";if(st.t1!=null){cls=o.ok?"ok":(k===st.t1?"bad":"dim")}return '<button class="opt '+cls+'" data-k="'+k+'" '+(st.t1!=null?"disabled":"")+'><span class="otx">'+esc(o.txt)+"</span>"+(st.t1!=null?'<span class="oex">'+esc(o.ex)+"</span>":"")+"</button>"}).join("")+"</div></div>"+
