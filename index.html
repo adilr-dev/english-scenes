@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Line by Line</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Golos+Text:wght@400;500;600;700&display=swap">
+<style>body{margin:0}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}/* Layout: video-feed column — 16:9 scene "thumbnails" built from type on show-tinted gradients, scene page = thumbnail, YouTube link, line box, breakdown, two tasks; bottom tab bar */
+:root{
+  --bg:#0F1117; --surface:#181B24; --raise:#222634; --ink:#ECEEF4; --muted:#9AA0B2; --line:#2A2F3E;
+  --accent:#FF5A4E; --accent-d:#C63A30; --accent-bg:#3A1C1E; --on:#FFFFFF;
+  --ok:#3CCB7F; --ok-bg:#12301F; --bad:#FF6B7A; --bad-bg:#3A1720; --gold:#F5B82E; --flame:#FF8545;
+  --display:'Unbounded','Golos Text',system-ui,sans-serif; --body:'Golos Text',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color-scheme:dark}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#F5F5F7; --surface:#FFFFFF; --raise:#EEEFF3; --ink:#14161D; --muted:#5F6577; --line:#DFE1E8;
+  --accent:#E5392C; --accent-d:#A82519; --accent-bg:#FDE8E6; --on:#FFFFFF;
+  --ok:#1E9A57; --ok-bg:#E2F5EA; --bad:#D3384A; --bad-bg:#FCE6E9; --gold:#C98A00; --flame:#E8641E; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F5F5F7; --surface:#FFFFFF; --raise:#EEEFF3; --ink:#14161D; --muted:#5F6577; --line:#DFE1E8;
+  --accent:#E5392C; --accent-d:#A82519; --accent-bg:#FDE8E6; --on:#FFFFFF;
+  --ok:#1E9A57; --ok-bg:#E2F5EA; --bad:#D3384A; --bad-bg:#FCE6E9; --gold:#C98A00; --flame:#E8641E; color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+#app{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 110px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0;font-weight:700;letter-spacing:-.01em}
+button{font-family:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+svg{display:block;flex:none}
+.note{color:var(--muted);font-size:14px}
+.tlabel{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:8px;padding-block:10px}
+.brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.02em}
+.brand b{color:var(--accent)}
+.brand.big{font-size:24px}
+.stats{display:flex;gap:12px;align-items:center;font-weight:700;font-variant-numeric:tabular-nums}
+.stat{display:flex;align-items:center;gap:4px}
+.chip{border:2px solid var(--line);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700;background:var(--surface);cursor:pointer}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:4px 10px;scrollbar-width:none;margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
+.chips::-webkit-scrollbar{display:none}
+.fchip{flex:none;border:0;background:var(--raise);border-radius:10px;padding:8px 13px;font:600 14px/1 var(--body);cursor:pointer;white-space:nowrap}
+.fchip.on{background:var(--ink);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px 16px}
+.card{display:flex;flex-direction:column;gap:10px;background:none;border:0;padding:0;text-align:left;cursor:pointer;min-width:0}
+.thumb{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;display:flex;align-items:center;justify-content:center;padding:28px 18px}
+.thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.45))}
+.thumb>*{position:relative;z-index:1}
+.tshow{position:absolute;top:10px;left:12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.92;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.tline{font-family:var(--display);font-weight:700;font-size:clamp(17px,4.6vw,22px);line-height:1.25;text-align:center;text-wrap:balance;text-shadow:0 2px 10px rgba(0,0,0,.35)}
+.thumb.big{border-radius:16px}
+.thumb.big .tline{font-size:clamp(20px,6vw,30px)}
+.tbadges{position:absolute;right:10px;bottom:10px;display:flex;gap:6px}
+.tb{background:rgba(0,0,0,.7);color:#fff;font-size:12px;font-weight:700;border-radius:6px;padding:3px 7px;display:flex;align-items:center;gap:4px;font-variant-numeric:tabular-nums}
+.tb.ok{color:#7CF0AE}
+.tplay{position:absolute;left:12px;bottom:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center;color:#fff}
+.cmeta{min-width:0}
+.ctitle{font-weight:700;font-size:16px;line-height:1.3}
+.csub{color:var(--muted);font-size:13px;margin-top:3px}
+.lh{display:flex;align-items:center;gap:10px;padding-block:8px 12px}
+.lh .note{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x{background:none;border:0;padding:6px;cursor:pointer;color:var(--ink);border-radius:8px}
+.x.sv.on{color:var(--gold)}
+.ytb{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;background:var(--accent);color:var(--on);text-decoration:none;font-weight:700;border-radius:12px;padding:13px 16px;box-shadow:0 4px 0 var(--accent-d)}
+.ytb:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-d)}
+.sec{margin-top:24px}
+.sec p{margin:0 0 10px;max-width:65ch}
+.sit{font-size:16px}
+.linebox{margin-top:22px;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px}
+.ltag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.lline{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.3;margin-block:8px 12px}
+.lctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mini{background:var(--raise);color:var(--ink);border:0;border-radius:10px;width:42px;height:42px;display:grid;place-items:center;cursor:pointer}
+.lnk{background:none;border:0;color:var(--accent);font-weight:700;cursor:pointer;padding:8px 4px;font-size:15px;text-align:left}
+.ltr{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:17px}
+.gl{background:var(--surface);border-radius:12px;padding:6px 14px;border:2px solid var(--line)}
+.gr{display:flex;justify-content:space-between;gap:12px;padding-block:8px;border-top:1px solid var(--line)}
+.gr:first-child{border-top:0}
+.gr span:first-child{font-weight:700}
+.gr span:last-child{color:var(--muted);text-align:right}
+.qq{font-weight:600;font-size:17px}
+.qq .gap{display:inline-block;min-width:3em;border-bottom:3px solid var(--accent);color:var(--ok);text-align:center}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opts.row3{flex-direction:row;flex-wrap:wrap}
+.opts.row3 .opt{flex:1 1 90px;justify-content:center}
+.opt{text-align:left;width:100%;background:var(--surface);border:2px solid var(--line);box-shadow:0 3px 0 var(--line);border-radius:14px;padding:14px 16px;font:500 16px/1.35 var(--body);cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.opt.c{align-items:center;font-weight:700}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg);box-shadow:0 3px 0 var(--ok)}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg);box-shadow:0 3px 0 var(--bad)}
+.opt.dim{opacity:.7}
+.opt:disabled{cursor:default;color:var(--ink)}
+.oex{font-size:14px;color:var(--muted)}
+.opt.ok .oex,.opt.bad .oex{color:var(--ink)}
+.done{margin-top:26px;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:6px}
+.dh{font-family:var(--display);font-weight:700;font-size:18px}
+.stack{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:14px 18px;font:700 15px/1.2 var(--body);background:var(--accent);color:var(--on);box-shadow:0 4px 0 var(--accent-d);cursor:pointer}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--accent-d)}
+.btn.ghost{background:var(--raise);color:var(--ink);box-shadow:0 4px 0 var(--line)}
+.hero{padding-block:30px 6px}
+.hero h1{font-size:26px;line-height:1.2;margin-top:20px}
+.hero p{color:var(--muted);max-width:46ch;margin:10px 0 0}
+.lvls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.lvb{background:var(--surface);border:2px solid var(--line);box-shadow:0 3px 0 var(--line);border-radius:14px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:2px;text-align:left}
+.lvb b{font-family:var(--display);font-size:22px}
+.lvb span{color:var(--muted);font-size:13px}
+.lvb.on{border-color:var(--accent)}
+.h1s{font-size:24px;margin-block:8px 4px}
+.slist{display:flex;flex-direction:column;gap:10px}
+.srow{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;text-align:left}
+.sw{width:56px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--c1),var(--c2));flex:none}
+.sn{flex:1;min-width:0;display:flex;flex-direction:column}
+.sc{font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted)}
+.phr{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.phr .pl{background:none;border:0;padding:0;text-align:left;font-family:var(--display);font-weight:700;font-size:17px;cursor:pointer}
+.empty{background:var(--surface);border:2px dashed var(--line);border-radius:16px;padding:22px;margin-top:16px}
+.empty p{margin:0 0 6px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);border-top:1px solid var(--line);padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.nav .in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tab{background:none;border:0;border-radius:12px;padding:6px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.tab.on{color:var(--ink)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+.pwrap{aspect-ratio:16/9;max-width:100%;border-radius:16px;overflow:hidden;background:#000}
+.pwrap iframe{width:100%;height:100%;border:0;display:block}
+.pstart{width:100%;height:100%;border:0;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font:700 17px var(--body)}
+.pbig{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.55);display:grid;place-items:center}
+.pbig svg{width:32px;height:32px}
+.note2{font-size:13px;font-weight:500;opacity:.9}
+.ytl{display:inline-flex;gap:6px;align-items:center;margin-top:10px;color:var(--muted);font-size:14px}
+.tb.vid{position:absolute;left:52px;bottom:14px;background:var(--accent)}
+</style></head><body>
+<div id="app"><div class="hero"><div class="brand big">Line<b>by</b>Line</div><h1>Загрузка…</h1><p id="err" class="note"></p></div></div>
+<nav id="nav" class="nav" hidden></nav>
+<script>window.onerror=function(m,s,l){var e=document.getElementById("err");if(e)e.textContent="Ошибка: "+m+" (строка "+l+")"};</script>
+<script>
+(function(){
+"use strict";
+var SHOWS={
+gumball:{t:"Удивительный мир Гамбола",en:"The Amazing World of Gumball",c:["#1F5FD6","#5FB3FF"]},
+adv:{t:"Время приключений",en:"Adventure Time",c:["#0F8F86","#F2C230"]},
+witcher:{t:"Ведьмак",en:"The Witcher",c:["#2A2F38","#8D96A3"]},
+inv:{t:"Неуязвимый",en:"Invincible",c:["#1C3FA8","#F5C518"]},
+hp:{t:"Гарри Поттер",en:"Harry Potter",c:["#6E1423","#C9A227"]},
+ug:{t:"Дядя Деда",en:"Uncle Grandpa",c:["#C2362F","#F29E38"]},
+bread:{t:"Хлебоутки",en:"Breadwinners",c:["#3E8E2E","#B8E05A"]},
+angelo:{t:"Проказник Анджело",en:"Angelo Rules",c:["#D9562B","#F7B733"]},
+shrek:{t:"Шрек",en:"Shrek",c:["#4E7A1E","#A8C94A"]},
+toy:{t:"История игрушек",en:"Toy Story",c:["#2E62C9","#E8473B"]},
+sponge:{t:"Губка Боб",en:"SpongeBob SquarePants",c:["#E0A800","#5CC6E8"]},
+st:{t:"Очень странные дела",en:"Stranger Things",c:["#5A0E10","#D62B2B"]},
+lotr:{t:"Властелин колец",en:"The Lord of the Rings",c:["#3B3424","#B08D4A"]},
+spider:{t:"Человек-паук",en:"Spider-Man",c:["#A3171C","#1E3F9C"]},
+panda:{t:"Кунг-фу Панда",en:"Kung Fu Panda",c:["#8A2E14","#E5A23A"]},
+sw:{t:"Звёздные войны",en:"Star Wars",c:["#10141F","#4C6FB8"]},
+friends:{t:"Друзья",en:"Friends",c:["#5B2D8C","#E76F51"]},
+gf:{t:"Гравити Фолз",en:"Gravity Falls",c:["#1E4D3A","#D9A441"]}
+};
+/* q:1 — настоящая короткая цитата; q:0 — фраза для урока в духе сцены.
+   t: три ситуации [текст, верно?, пояснение]; gp: [предложение с ___, [верный, …]] */
+var SC=[
+{id:"gb1",sh:"gumball",who:"Ричард",lvl:"B1",q:0,ti:"Когда хочется отложить дело",
+ sit:"Ричард, папа Гамбола, — чемпион по безделью. Николь просит помочь по дому, а он изо всех сил ищет повод не вставать с дивана.",
+ line:"Can it wait? I'm really busy doing nothing.",ru:"Это может подождать? Я очень занят — ничего не делаю.",
+ note:"Can it wait? — вежливый способ отложить чью-то просьбу. Шутка в busy doing nothing: после busy глагол идёт с -ing (busy cooking, busy working).",
+ w:[["can it wait?","это может подождать?"],["busy","занятой"],["doing nothing","ничего не делать"]],yt:"Amazing World of Gumball Richard lazy",
+ t:[["Друг зовёт гулять, а вы доделываете домашнее задание",1,"Подходит: дело не срочное, и вы мягко просите отложить."],["Врач скорой просит вас срочно отойти в сторону",0,"Не подходит: это срочная ситуация, откладывать нельзя."],["Экзаменатор говорит, что время вышло и нужно сдать работу",0,"Прозвучит грубо: решение не за вами."]],
+ gp:["Sorry, I'm busy ___ my homework.",["doing","do","to do"]]},
+{id:"gb2",sh:"gumball",who:"Николь",lvl:"B1",q:0,ti:"Когда нужно выяснить, кто виноват",
+ sit:"Николь, мама Гамбола, много работает и быстро вскипает, когда дети опять что-то разбили. Сейчас она хочет знать правду.",
+ line:"Who broke this? Nobody leaves until I get an answer.",ru:"Кто это сломал? Никто не уйдёт, пока я не получу ответ.",
+ note:"После until о будущем ставится Present Simple, а не will: until I get, а не until I will get.",
+ w:[["broke","сломал (V2 от break)"],["nobody","никто"],["until","пока не"]],yt:"Amazing World of Gumball Nicole angry",
+ t:[["Учитель выясняет, кто разбил окно в классе",1,"Подходит: строгий тон взрослого, которому нужна правда."],["Вы встречаете друга на дне рождения",0,"Не подходит: звучит как допрос."],["Вы продавец и обращаетесь к покупателю",0,"Грубо: так с клиентами не говорят."]],
+ gp:["Nobody leaves until I ___ an answer.",["get","will get","got"]]},
+{id:"gb3",sh:"gumball",who:"Гамбол и Дарвин",lvl:"A2",q:0,ti:"Когда соглашаетесь на авантюру",
+ sit:"Гамбол придумывает очередной безумный план, а Дарвин сначала сомневается. Но дружба побеждает здравый смысл.",
+ line:"This is a terrible idea. I'm in!",ru:"Это ужасная идея. Я в деле!",
+ note:"I'm in = «я участвую». Противоположное: I'm out. Вопрос: Are you in or out?",
+ w:[["terrible","ужасный"],["I'm in","я в деле"]],yt:"Amazing World of Gumball Gumball Darwin plan",
+ t:[["Друг предлагает в два часа ночи сходить за пиццей",1,"Подходит: шуточное согласие на спонтанную идею."],["Директор предлагает вам подписать трудовой договор",0,"Слишком неформально для официальной ситуации."],["Вас спрашивают, сколько вам лет",0,"Ответ не по смыслу."]],
+ gp:["We're going to the cinema. Are you in or ___?",["out","off","away"]]},
+{id:"gb4",sh:"gumball",who:"Гамбол",lvl:"A2",q:0,ti:"Когда волнуетесь перед встречей",
+ sit:"Гамбол влюблён в Пенни и каждый раз нервничает, когда она рядом. Он даёт себе указания, но обычно всё идёт не по плану.",
+ line:"Just act cool. Don't say anything weird.",ru:"Просто веди себя круто. Не говори ничего странного.",
+ note:"Act cool = «держаться невозмутимо». Отрицательный приказ строится через Don't + глагол. После not / don't — anything, а не something.",
+ w:[["act cool","держаться невозмутимо"],["weird","странный"]],yt:"Amazing World of Gumball Gumball Penny",
+ t:[["Вы говорите себе это перед встречей с человеком, который нравится",1,"Подходит: подбадривание себя."],["Вы описываете погоду в эссе",0,"Не по теме и слишком разговорно."],["Вы извиняетесь перед учителем",0,"Не подходит по смыслу."]],
+ gp:["Don't say ___ weird.",["anything","something","nothing"]]},
+{id:"gb5",sh:"gumball",who:"Анаис",lvl:"B2",q:0,ti:"Когда поправляете обоих спорщиков",
+ sit:"Анаис — младшая сестра, но самая умная в семье. Пока братья спорят, она спокойно объясняет, что ошибаются оба.",
+ line:"Technically, you're both wrong.",ru:"Строго говоря, вы оба неправы.",
+ note:"Technically = «формально, строго говоря». Звучит слегка занудно — так говорят, когда придираются к деталям. Both стоит после глагола be: you're both wrong.",
+ w:[["technically","строго говоря"],["both","оба"],["wrong","неправый"]],yt:"Amazing World of Gumball Anais smart",
+ t:[["Два друга спорят, чья команда выиграла, а вы знаете, что была ничья",1,"Подходит: поправляете обоих."],["Вы благодарите бабушку за подарок",0,"Не по смыслу."],["Вы просите помощи у незнакомца",0,"Звучит как спор, неуместно."]],
+ gp:["___, you're both wrong.",["Technically","Technical","Technique"]]},
+{id:"at1",sh:"adv",who:"Финн",lvl:"A2",q:1,ti:"Когда что-то очень круто",
+ sit:"Финн и Джейк, когда случается что-то потрясающее, восклицают «математическими» словами вместо обычного «круто».",
+ line:"Mathematical!",ru:"Математично! (= Круто!)",
+ note:"В сериале mathematical и algebraic означают «потрясающе». Это шутка для фанатов. В жизни говорят: Awesome! That's amazing! Сленг: That's sick!",
+ w:[["mathematical","математический (здесь: круто)"],["awesome","потрясающий"]],yt:"Adventure Time Finn mathematical",
+ t:[["Друг-фанат сериала рассказал, что вы оба прошли в финал",1,"Подходит: шутка, понятная своим."],["Вы пишете эссе для IELTS",0,"Сленг в академическом письме недопустим."],["Вы на собеседовании узнали о зарплате",0,"Слишком несерьёзно для официальной ситуации."]],
+ gp:["We won the game! That's ___!",["awesome","awful","awkward"]]},
+{id:"at2",sh:"adv",who:"Джейк",lvl:"B1",q:0,ti:"Когда успокаиваете друга",
+ sit:"Джейк — пёс, который умеет растягиваться во что угодно. Когда Финн паникует, Джейк спокоен и уверен, что выход найдётся.",
+ line:"Relax, buddy. We'll figure it out.",ru:"Расслабься, дружище. Мы разберёмся.",
+ note:"Figure out = «разобраться, понять». Buddy — дружеское обращение, как «бро».",
+ w:[["relax","расслабиться"],["buddy","дружище"],["figure out","разобраться"]],yt:"Adventure Time Jake calm Finn",
+ t:[["Друг потерял ключи и паникует",1,"Подходит: поддержка и обещание вместе решить проблему."],["Вы обращаетесь к директору школы",0,"Buddy слишком фамильярно."],["Вы объясняете, что уже всё решили",0,"Фраза о будущем решении, а не о готовом."]],
+ gp:["Don't worry, we'll figure it ___.",["out","up","off"]]},
+{id:"at3",sh:"adv",who:"Принцесса Бубльгум",lvl:"B1",q:0,ti:"Когда сначала нужно проверить",
+ sit:"Принцесса Бубльгум — правительница Конфетного королевства и учёная. Прежде чем что-то решать, она проводит эксперименты.",
+ line:"Let me run a few tests first.",ru:"Сначала дай мне провести пару тестов.",
+ note:"Run a test — «провести тест», устойчивое сочетание. Let me + глагол — «позволь мне», вежливое предложение что-то сделать.",
+ w:[["run a test","провести тест"],["a few","несколько"],["first","сначала"]],yt:"Adventure Time Princess Bubblegum science",
+ t:[["Коллега предлагает запустить новую программу без проверки",1,"Подходит: вы просите сначала всё проверить."],["Вы прощаетесь с другом",0,"Не по смыслу."],["Вы заказываете кофе",0,"Не по смыслу."]],
+ gp:["Let me ___ a few tests first.",["run","make","go"]]},
+{id:"at4",sh:"adv",who:"Финн",lvl:"A2",q:0,ti:"Когда требуете кого-то отпустить",
+ sit:"Король Льда снова похитил принцессу. Финн врывается в ледяной замок, чтобы её спасти.",
+ line:"Let her go, Ice King!",ru:"Отпусти её, Ледяной король!",
+ note:"Let + кто-то + глагол без to: let her go, let me know. Let go = «отпустить».",
+ w:[["let go","отпустить"],["king","король"]],yt:"Adventure Time Finn Ice King princess",
+ t:[["Кто-то держит вашу собаку за ошейник и не отпускает",1,"Подходит: требование отпустить."],["Вы просите передать соль",0,"Не по смыслу."],["Вы хотите, чтобы человек остался",0,"Наоборот: let go значит отпустить."]],
+ gp:["Please let me ___ when you arrive.",["know","to know","knowing"]]},
+{id:"at5",sh:"adv",who:"Марселин",lvl:"B1",q:0,ti:"Когда это была просто шутка",
+ sit:"Марселин, королева вампиров, обожает пугать Финна и Джейка, а потом смеётся над их реакцией.",
+ line:"Relax, I'm just messing with you.",ru:"Расслабься, я просто прикалываюсь.",
+ note:"Mess with someone = «подшучивать, прикалываться над кем-то». Present Continuous, потому что это происходит прямо сейчас.",
+ w:[["mess with","подшучивать над"],["just","просто"]],yt:"Adventure Time Marceline prank",
+ t:[["Вы в шутку сказали другу, что урок отменили, а он поверил",1,"Подходит: признаёте, что шутили."],["Вы приносите официальные извинения клиенту",0,"Слишком неформально."],["Вы рассказываете серьёзную новость",0,"Противоречит смыслу."]],
+ gp:["I'm just ___ with you.",["messing","mess","messed"]]},
+{id:"wi1",sh:"witcher",who:"Геральт",lvl:"B1",q:1,ti:"Когда хочется уйти от разговора",
+ sit:"Эта реплика — из игры «Ведьмак 3» (по тем же книгам, что и сериал). Геральт немногословен: когда разговор ему неинтересен, он просто замечает что-то о погоде.",
+ line:"Wind's howling.",ru:"Ветер воет.",
+ note:"Wind's = The wind is. Howl = «выть». Фраза стала мемом: её говорят в шутку, когда хотят сменить тему или промолчать.",
+ w:[["howl","выть"],["wind","ветер"]],yt:"Witcher 3 Geralt wind's howling",
+ t:[["Друг-фанат «Ведьмака» задаёт вам неловкий вопрос",1,"Подходит как шутка, чтобы уйти от темы."],["Учитель спрашивает, почему вы не сделали задание",0,"Прозвучит дерзко."],["Вы пишете прогноз погоды для отчёта",0,"Мем не подходит для официального текста."]],
+ gp:["Listen! The wolves are ___.",["howling","howl","howled"]]},
+{id:"wi2",sh:"witcher",who:"Геральт",lvl:"B1",q:0,ti:"Когда соглашаетесь, но за цену",
+ sit:"Геральт берёт заказ на чудовище. Работа опасная, и бесплатно он рисковать не собирается.",
+ line:"I'll do it. But it'll cost you.",ru:"Я сделаю это. Но это тебе дорого обойдётся.",
+ note:"It'll cost you = «это будет стоить денег» или «придётся заплатить», иногда шутливо. I'll — решение в момент речи.",
+ w:[["cost","стоить"],["it'll","it will"]],yt:"The Witcher Geralt contract monster",
+ t:[["Друг просит помочь с переездом, а вы в шутку просите пиццу",1,"Подходит: шутливое условие."],["Ребёнок просит вас завязать шнурки",0,"Неуместно требовать плату."],["Вы обещаете бесплатную помощь",0,"Противоречит смыслу."]],
+ gp:["I ___ do it, I promise.",["will","am","do"]]},
+{id:"wi3",sh:"witcher",who:"Лютик",lvl:"A2",q:0,ti:"Когда в шутку вымогаете признание",
+ sit:"Бард Лютик повсюду следует за Геральтом и не умолкает. Геральт ворчит, но Лютик уверен, что ведьмак его обожает.",
+ line:"Oh, come on. You love me, admit it.",ru:"Да ладно тебе. Ты меня любишь, признай.",
+ note:"Come on — «да ладно», «ну же». Admit it — «признай». Дружеская, шутливая интонация.",
+ w:[["come on","да ладно"],["admit","признавать"]],yt:"The Witcher Jaskier Geralt",
+ t:[["Друг делает вид, что ему не понравился ваш подарок, но улыбается",1,"Подходит: дружеская шутка."],["Вы на деловых переговорах",0,"Слишком фамильярно."],["Вы извиняетесь за опоздание",0,"Не по смыслу."]],
+ gp:["You were wrong. Just ___ it.",["admit","admits","admitting"]]},
+{id:"wi4",sh:"witcher",who:"Йеннифэр",lvl:"B1",q:0,ti:"Когда отстаиваете свою свободу",
+ sit:"Йеннифэр — могущественная чародейка, которая с юности боролась за право решать свою судьбу сама.",
+ line:"Don't tell me what I can or can't do.",ru:"Не указывай мне, что я могу, а что нет.",
+ note:"Tell someone what to do — «указывать». Can / can't — возможность и разрешение. Тон резкий.",
+ w:[["tell","говорить, указывать"],["can't","не мочь"]],yt:"The Witcher Yennefer power",
+ t:[["Человек без права голоса решает за вас, кем вам работать",1,"Подходит: вы защищаете своё решение."],["Учитель объясняет правила экзамена",0,"Правила экзамена — не повод грубить."],["Вы просите совета у друга",0,"Противоречит смыслу: вы сами спросили."]],
+ gp:["Nobody can tell me what I ___ do.",["can","cans","to"]]},
+{id:"wi5",sh:"witcher",who:"Цири",lvl:"A2",q:0,ti:"Когда вы уже не ребёнок",
+ sit:"Цири растёт, тренируется и устала от того, что её всё время оберегают.",
+ line:"I'm not a child anymore.",ru:"Я больше не ребёнок.",
+ note:"Not … anymore = «больше не». Anymore стоит в конце предложения.",
+ w:[["anymore","больше (не)"],["child","ребёнок"]],yt:"The Witcher Ciri training",
+ t:[["Родители не разрешают вам самому поехать в соседний город, а вам 18",1,"Подходит: вы подчёркиваете, что выросли."],["Вам пять лет, и вы просите конфету",0,"Не по смыслу."],["Вы рассказываете о детстве",0,"Не о том, что сейчас."]],
+ gp:["I don't live there ___.",["anymore","already","yet"]]},
+{id:"in1",sh:"inv",who:"Омни-Мэн",lvl:"A2",q:1,ti:"Когда кто-то не понимает очевидного",
+ sit:"В напряжённой сцене Нолан (Омни-Мэн) требует от сына Марка задуматься. Момент стал одним из самых известных мемов сериала.",
+ line:"Think, Mark!",ru:"Думай, Марк!",
+ note:"Повелительное наклонение — глагол без подлежащего: Think! Listen! Look! В мемах фразу говорят в шутку, когда друг не видит очевидного.",
+ w:[["think","думать"]],yt:"Invincible Think Mark scene",
+ t:[["Друг ищет телефон, который у него в руке",1,"Подходит как шутка-мем."],["Вы утешаете расстроенного человека",0,"Прозвучит резко."],["Вы обращаетесь к начальнику",0,"Приказной тон неуместен."]],
+ gp:["___ carefully before you answer.",["Think","Thinks","Thinking"]]},
+{id:"in2",sh:"inv",who:"Марк",lvl:"B1",q:0,ti:"Когда срочно нужно уйти",
+ sit:"Марк пытается жить обычной жизнью, но в любой момент может понадобиться спасать мир. Приходится срочно сбегать со свиданий и уроков.",
+ line:"Sorry, I have to go. Something came up.",ru:"Извини, мне нужно идти. Кое-что случилось.",
+ note:"Something came up = «кое-что возникло», вежливое объяснение, не вдаваясь в детали. Have to — необходимость.",
+ w:[["come up","возникнуть (о деле)"],["have to","быть должным"]],yt:"Invincible Mark leaves date",
+ t:[["Вы на встрече с другом, и вам срочно звонят с работы",1,"Подходит: вежливо и без подробностей."],["Вы пришли на работу утром",0,"Вы не уходите, а приходите."],["Друг спрашивает, как дела",0,"Не по смыслу."]],
+ gp:["Sorry, I can't come. Something came ___.",["up","out","in"]]},
+{id:"in3",sh:"inv",who:"Дебби",lvl:"B1",q:0,ti:"Когда разочарованы, а не злы",
+ sit:"Дебби, мама Марка, узнаёт, что сын её обманул. Она не кричит, и от этого ещё тяжелее.",
+ line:"I'm not angry. I'm just disappointed.",ru:"Я не злюсь. Я просто разочарована.",
+ note:"Классическая родительская фраза. Disappointed — о человеке (я разочарован), disappointing — о вещи (фильм разочаровывающий).",
+ w:[["angry","сердитый"],["disappointed","разочарованный"]],yt:"Invincible Debbie disappointed",
+ t:[["Младший брат снова соврал вам",1,"Подходит: спокойно показываете чувства."],["Вам подарили то, что вы хотели",0,"Противоречит смыслу."],["Вы описываете фильм",0,"Про фильм говорят disappointing."]],
+ gp:["The ending was really ___.",["disappointing","disappointed","disappoint"]]},
+{id:"in4",sh:"inv",who:"Атом Ева",lvl:"B1",q:0,ti:"Когда невозможно, но стоит попытаться",
+ sit:"Атом Ева понимает, что героям не под силу помочь всем. Но это не повод опускать руки.",
+ line:"We can't save everyone, but we can try.",ru:"Мы не можем спасти всех, но можем попытаться.",
+ note:"Can't … but can … — противопоставление. Everyone — единственное число: everyone is.",
+ w:[["save","спасать"],["try","пытаться"],["everyone","все"]],yt:"Invincible Atom Eve",
+ t:[["Волонтёры обсуждают, как помочь бездомным животным",1,"Подходит: реалистично и с надеждой."],["Вы отказываетесь даже пробовать",0,"Фраза о попытке, а не об отказе."],["Вы заказываете еду",0,"Не по смыслу."]],
+ gp:["Everyone ___ welcome here.",["is","are","be"]]},
+{id:"in5",sh:"inv",who:"Сесил",lvl:"A2",q:0,ti:"Когда разговор не терпит отлагательств",
+ sit:"Сесил руководит агентством, которое следит за супергероями. Когда он вызывает к себе, это всегда серьёзно.",
+ line:"We need to talk. Now.",ru:"Нам нужно поговорить. Сейчас.",
+ note:"We need to talk — фраза, после которой обычно следует серьёзный разговор. Короткое «Now.» усиливает срочность.",
+ w:[["need to","нужно"],["talk","разговаривать"]],yt:"Invincible Cecil Mark talk",
+ t:[["Начальник обнаружил серьёзную ошибку в проекте",1,"Подходит: серьёзный тон."],["Вы зовёте друга на чай",0,"Слишком тревожно для мелочи."],["Вы смотрите кино и хотите тишины",0,"Наоборот, вы хотите не говорить."]],
+ gp:["We need ___ talk.",["to","for","at"]]},
+{id:"hp1",sh:"hp",who:"Гермиона",lvl:"A2",q:1,ti:"Когда поправляете произношение",
+ sit:"«Философский камень». На уроке заклинаний Рон машет палочкой и неправильно произносит слова. Гермиона поправляет ударение.",
+ line:"It's Levi-O-sa, not Levio-SA.",ru:"Левио́са, а не Левиоса́.",
+ note:"Схема It's X, not Y удобна, чтобы поправить кого-то. В английском ударение меняет звучание слова: REcord (запись) и reCORD (записывать).",
+ w:[["not","не"]],yt:"Harry Potter Hermione Leviosa",
+ t:[["Друг говорит «Лондан», а вы поправляете",1,"Подходит: схема It's X, not Y."],["Вы хвалите чьё-то произношение",0,"Противоречит смыслу."],["Вы просите повторить",0,"Вы не поправляете, а переспрашиваете."]],
+ gp:["It's Tuesday, ___ Thursday.",["not","no","don't"]]},
+{id:"hp2",sh:"hp",who:"Гарри",lvl:"B2",q:1,ti:"Когда замышляете шалость",
+ sit:"«Узник Азкабана». Чтобы Карта мародёров показала все тайные ходы Хогвартса, нужно произнести особую клятву.",
+ line:"I solemnly swear that I am up to no good.",ru:"Торжественно клянусь, что замышляю только шалость.",
+ note:"Be up to no good = «замышлять что-то нехорошее». Solemnly swear = «торжественно клясться». What are you up to? = «Что ты задумал?» или просто «Чем занимаешься?».",
+ w:[["solemnly","торжественно"],["swear","клясться"],["be up to no good","замышлять недоброе"]],yt:"Harry Potter Marauder's Map I solemnly swear",
+ t:[["Друзья тихо смеются в углу, а вы спрашиваете, что они задумали",1,"Подходит: What are you up to?"],["Вы даёте присягу в суде",0,"Это шутливая формула, не настоящая клятва."],["Вы рассказываете, как помогли бабушке",0,"Противоречит смыслу."]],
+ gp:["What are you ___ to this weekend?",["up","on","in"]]},
+{id:"hp3",sh:"hp",who:"Хагрид",lvl:"B1",q:1,ti:"Когда сболтнули лишнего",
+ sit:"Добродушный Хагрид не умеет хранить секреты: проговаривается о тайне и тут же понимает это.",
+ line:"I shouldn't have said that.",ru:"Не стоило мне этого говорить.",
+ note:"Shouldn't have + V3 — сожаление о прошлом: «не надо было». I should have called = «мне надо было позвонить».",
+ w:[["shouldn't have","не следовало"],["said","сказал (V3 от say)"]],yt:"Harry Potter Hagrid I shouldn't have said that",
+ t:[["Вы случайно рассказали другу о сюрпризе на его день рождения",1,"Подходит: сожаление о сказанном."],["Вы готовитесь к выступлению",0,"Вы ещё ничего не сказали."],["Вы гордитесь своей речью",0,"Противоречит смыслу."]],
+ gp:["I should have ___ you earlier.",["called","call","calling"]]},
+{id:"hp4",sh:"hp",who:"Рон",lvl:"A2",q:0,ti:"Когда страшно и хочется назад",
+ sit:"Рон до ужаса боится пауков. Когда в лесу их становится слишком много, он готов бежать без оглядки.",
+ line:"I hate spiders. Can we go back now?",ru:"Ненавижу пауков. Может, вернёмся?",
+ note:"Can we …? — мягкое предложение. Go back = «вернуться».",
+ w:[["hate","ненавидеть"],["spider","паук"],["go back","вернуться"]],yt:"Harry Potter Ron spiders forest",
+ t:[["Вы зашли в тёмный подвал, и вам страшно",1,"Подходит: страх и просьба вернуться."],["Вы в восторге от зоопарка",0,"Противоречит смыслу."],["Вы на работе обсуждаете бюджет",0,"Не по смыслу."]],
+ gp:["It's late. Let's go ___ home.",["back","behind","after"]]},
+{id:"hp5",sh:"hp",who:"Снейп",lvl:"B1",q:0,ti:"Когда строго обрываете",
+ sit:"Профессор Снейп не терпит болтовни на уроках и особенно не любит, когда Гермиона отвечает без спроса.",
+ line:"Silence. Nobody asked for your opinion.",ru:"Тишина. Никто не спрашивал вашего мнения.",
+ note:"Ask for = «просить, спрашивать о чём-то». Nobody asked — очень резкая фраза, в жизни её почти всегда воспримут как грубость.",
+ w:[["silence","тишина"],["opinion","мнение"],["ask for","просить о"]],yt:"Harry Potter Snape Hermione class",
+ t:[["Вы играете строгого учителя в школьной постановке",1,"Подходит: это роль."],["Коллега делится идеей на совещании",0,"Очень грубо в реальной жизни."],["Друг советует фильм",0,"Грубо и обидно."]],
+ gp:["Can I ask ___ your advice?",["for","about of","on"]]},
+{id:"ug1",sh:"ug",who:"Дядя Деда",lvl:"A2",q:1,ti:"Приветствие с огоньком",
+ sit:"Дядя Деда, дядя и дедушка всех детей мира, врывается в своём доме на колёсах с фирменным приветствием. Неважно, который час.",
+ line:"Good mornin'!",ru:"Доброе утро!",
+ note:"Mornin' — разговорное сокращение morning: звук g в окончании -ing часто проглатывают. Good morning говорят до полудня, после — good afternoon.",
+ w:[["morning","утро"],["afternoon","день, после полудня"]],yt:"Uncle Grandpa good morning",
+ t:[["9 утра, вы заходите в класс",1,"Подходит: обычное утреннее приветствие."],["Вы приходите на встречу в 15:00",0,"После полудня говорят Good afternoon."],["Вы ложитесь спать",0,"Перед сном говорят Good night."]],
+ gp:["It's 3 pm. Good ___!",["afternoon","morning","night"]]},
+{id:"ug2",sh:"ug",who:"Пицца Стив",lvl:"B1",q:0,ti:"Когда (слишком) уверены в себе",
+ sit:"Пицца Стив — кусок пиццы в солнечных очках, который считает себя самым крутым. Обычно его планы проваливаются.",
+ line:"Relax, I've got this. I'm a professional.",ru:"Спокойно, я справлюсь. Я профессионал.",
+ note:"I've got this = «я справлюсь», уверенная разговорная фраза. Часто говорят перед тем, как что-то пойдёт не так.",
+ w:[["I've got this","я справлюсь"],["professional","профессионал"]],yt:"Uncle Grandpa Pizza Steve",
+ t:[["Друг волнуется, а вы уверенно берёте задачу на себя",1,"Подходит: уверенность."],["Вы просите о помощи",0,"Противоречит смыслу."],["Вы признаётесь, что ничего не умеете",0,"Противоречит смыслу."]],
+ gp:["Don't worry, I've ___ this.",["got","get","gotten to"]]},
+{id:"ug3",sh:"ug",who:"Мистер Гас",lvl:"B1",q:0,ti:"Когда просите хоть раз всё сделать по плану",
+ sit:"Мистер Гас — рассудительный динозавр в команде Дяди Деды. Безумные идеи друзей его утомляют.",
+ line:"Can we just follow the plan for once?",ru:"Можем мы хоть раз просто действовать по плану?",
+ note:"For once = «хоть раз», с оттенком раздражения. Follow the plan = «следовать плану».",
+ w:[["follow","следовать"],["for once","хоть раз"]],yt:"Uncle Grandpa Mr Gus",
+ t:[["Команда снова меняет маршрут в последний момент",1,"Подходит: раздражение и просьба."],["Вы впервые составляете план",0,"For once подразумевает, что так бывало много раз."],["Вы хвалите за отличную импровизацию",0,"Противоречит смыслу."]],
+ gp:["Can you be on time for ___?",["once","one","ones"]]},
+{id:"ug4",sh:"ug",who:"Поясная Сумка",lvl:"A2",q:0,ti:"Когда что-то точно где-то есть",
+ sit:"В говорящей поясной сумке Дяди Деды хранится всё на свете. Найти нужную вещь — отдельное приключение.",
+ line:"Everything you need is in here somewhere.",ru:"Всё, что тебе нужно, где-то здесь.",
+ note:"Somewhere = «где-то». Everything + is (единственное число). In here = «вот здесь, внутри».",
+ w:[["somewhere","где-то"],["everything","всё"]],yt:"Uncle Grandpa Belly Bag",
+ t:[["Вы ищете паспорт в огромной сумке",1,"Подходит."],["Вы точно знаете, где лежит вещь",0,"Somewhere значит, что место неизвестно."],["Вы прощаетесь",0,"Не по смыслу."]],
+ gp:["Everything ___ ready.",["is","are","be"]]},
+{id:"br1",sh:"bread",who:"СвейСвей",lvl:"A2",q:0,ti:"Когда опаздываете",
+ sit:"Утки СвейСвей и Бадьюс развозят хлеб на ракетном фургоне. Заказов много, времени мало, а летят они на бешеной скорости.",
+ line:"Hold on tight! We're running late!",ru:"Держись крепче! Мы опаздываем!",
+ note:"Run late = «опаздывать» (Present Continuous: we're running late). Hold on tight = «держись крепче».",
+ w:[["hold on","держаться"],["tight","крепко"],["run late","опаздывать"]],yt:"Breadwinners SwaySway Buhdeuce delivery",
+ t:[["Вы пишете коллеге, что застряли в пробке",1,"Подходит: I'm running late."],["Вы пришли за час до начала",0,"Противоречит смыслу."],["Вы рассказываете о вчерашнем дне",0,"Фраза о том, что происходит сейчас."]],
+ gp:["Sorry, I'm running ___. See you in ten minutes.",["late","later","lately"]]},
+{id:"br2",sh:"bread",who:"Бадьюс",lvl:"B1",q:0,ti:"Когда что-то пошло не по плану",
+ sit:"Бадьюс вечно нажимает не те кнопки, и фургон, хлеб или целый дом взлетают на воздух.",
+ line:"Oops. That wasn't supposed to happen.",ru:"Упс. Так не должно было случиться.",
+ note:"Be supposed to = «предполагается, должно». It wasn't supposed to = «так не планировалось».",
+ w:[["oops","упс"],["be supposed to","предполагается"]],yt:"Breadwinners Buhdeuce oops",
+ t:[["Вы готовили торт, а он сгорел",1,"Подходит."],["Всё прошло идеально",0,"Противоречит смыслу."],["Вы объясняете правила игры",0,"Не по смыслу."]],
+ gp:["You were supposed ___ call me!",["to","for","at"]]},
+{id:"br3",sh:"bread",who:"СвейСвей",lvl:"B1",q:0,ti:"Когда пора зарабатывать",
+ sit:"Для уток-хлебовозов работа — это буквально хлеб. Поэтому они рвутся в бой при каждом заказе.",
+ line:"Let's get this bread!",ru:"Давай заработаем! (буквально: добудем этот хлеб)",
+ note:"Get this bread — современный сленг: «заработать денег» или «добиться успеха». В сериале каламбур: утки и правда развозят хлеб.",
+ w:[["bread","хлеб (сленг: деньги)"],["let's","давай"]],yt:"Breadwinners bread rocket van",
+ t:[["Вы с другом идёте на подработку в выходные",1,"Подходит: шутливый сленг."],["Вы пишете резюме",0,"Сленг в официальном тексте неуместен."],["Вы покупаете хлеб в магазине",0,"Это игра слов, а не обычная просьба."]],
+ gp:["Let's ___ to work!",["get","got","getting"]]},
+{id:"br4",sh:"bread",who:"Бадьюс",lvl:"A2",q:0,ti:"Когда приносите доставку",
+ sit:"Утки прибывают к клиенту и торжественно вручают свежий хлеб.",
+ line:"Special delivery! Your bread is here!",ru:"Особая доставка! Ваш хлеб прибыл!",
+ note:"Delivery = «доставка». Is here = «прибыл, здесь». Так говорят курьеры и друзья, которые принесли что-то вкусное.",
+ w:[["delivery","доставка"],["special","особый"]],yt:"Breadwinners special delivery",
+ t:[["Вы принесли друзьям пиццу",1,"Подходит, шутливо."],["Вы ждёте посылку",0,"Говорит тот, кто доставляет."],["Вы отправляете письмо",0,"Не по смыслу."]],
+ gp:["Your pizza ___ here!",["is","are","am"]]},
+{id:"an1",sh:"angelo",who:"Анджело",lvl:"A2",q:0,ti:"Когда раскрываете хитрый план",
+ sit:"Анджело всегда находит хитрый способ выкрутиться и обращается прямо к зрителю, чтобы объяснить свой план.",
+ line:"Okay, here's the plan.",ru:"Итак, вот план.",
+ note:"Here's = here is, «вот». Here's the thing… = «дело вот в чём».",
+ w:[["plan","план"],["here's","вот"]],yt:"Angelo Rules plan",
+ t:[["Вы объясняете друзьям, как устроить сюрприз учителю",1,"Подходит."],["Вы отменяете поездку",0,"Не по смыслу."],["Вы просите прощения",0,"Не по смыслу."]],
+ gp:["Here ___ your keys.",["are","is","am"]]},
+{id:"an2",sh:"angelo",who:"Анджело",lvl:"B2",q:0,ti:"Когда технически не соврали",
+ sit:"Анджело пытается выкрутиться перед взрослыми так, чтобы формально не соврать.",
+ line:"Technically, I didn't lie. I just didn't tell the whole truth.",ru:"Строго говоря, я не врал. Я просто не сказал всей правды.",
+ note:"Tell the truth = «говорить правду» (не say the truth). Tell a lie = «солгать». The whole truth = «вся правда».",
+ w:[["lie","лгать"],["the whole truth","вся правда"]],yt:"Angelo Rules lie truth",
+ t:[["Вы сказали маме, что сделали уроки, но умолчали, что не все",1,"Подходит."],["Вы честно рассказали всё",0,"Противоречит смыслу."],["Вы рассказываете анекдот",0,"Не по смыслу."]],
+ gp:["Please ___ me the truth.",["tell","say","speak"]]},
+{id:"an3",sh:"angelo",who:"Шервуд",lvl:"B1",q:0,ti:"Ирония перед катастрофой",
+ sit:"Друг Анджело Шервуд нервничает перед очередной авантюрой. Чтобы успокоиться, он говорит фразу, после которой всё обычно идёт наперекосяк.",
+ line:"What could possibly go wrong?",ru:"Что вообще может пойти не так?",
+ note:"Go wrong = «пойти не так». Possibly усиливает вопрос. Фразу почти всегда говорят с иронией.",
+ w:[["go wrong","пойти не так"],["possibly","возможно (усиление)"]],yt:"Angelo Rules Sherwood",
+ t:[["Друг предлагает съехать с горы на тазу",1,"Подходит: ирония."],["Вы серьёзно спрашиваете врача о рисках операции",0,"Ирония здесь неуместна."],["Вы хвалите хорошую погоду",0,"Не по смыслу."]],
+ gp:["Everything went ___.",["wrong","wrongly","bad"]]},
+{id:"an4",sh:"angelo",who:"Лола",lvl:"B1",q:0,ti:"Когда не ведётесь на уловку",
+ sit:"Подруга Анджело Лола слишком умна, чтобы попасться на его трюки, и видит план насквозь.",
+ line:"Nice try, but I'm not falling for that.",ru:"Хорошая попытка, но я на это не поведусь.",
+ note:"Fall for something = «повестись, попасться на уловку». Nice try = «хорошая попытка», с иронией.",
+ w:[["fall for","повестись на"],["nice try","хорошая попытка"]],yt:"Angelo Rules Lola",
+ t:[["Младший брат говорит, что мама разрешила ему съесть ваш торт",1,"Подходит."],["Вы верите другу",0,"Противоречит смыслу."],["Вы падаете на льду",0,"Буквальное падение — другое значение."]],
+ gp:["Don't fall ___ that trick.",["for","on","to"]]},
+{id:"sh1",sh:"shrek",who:"Шрек",lvl:"B1",q:1,ti:"Когда объясняете, что всё сложнее",
+ sit:"Шрек пытается объяснить Ослу, что огры не так просты, как кажется, и что у них много слоёв.",
+ line:"Ogres are like onions.",ru:"Огры как лук (у них есть слои).",
+ note:"Be like = «быть похожим». Метафора о многослойности характера. В эссе сравнения строят так же: X is like Y.",
+ w:[["onion","лук"],["layer","слой"],["be like","быть похожим на"]],yt:"Shrek ogres are like onions",
+ t:[["Вы объясняете, что ваш строгий учитель на самом деле добрый",1,"Подходит: у людей много слоёв."],["Вы покупаете овощи",0,"Это метафора, а не про еду."],["Вы описываете цену товара",0,"Не по смыслу."]],
+ gp:["My brother is ___ my father: very calm.",["like","as","alike"]]},
+{id:"ty1",sh:"toy",who:"Базз Лайтер",lvl:"A2",q:1,ti:"Когда полны энтузиазма",
+ sit:"Космический рейнджер Базз уверен, что умеет летать, и произносит свой знаменитый девиз.",
+ line:"To infinity and beyond!",ru:"Бесконечность — не предел!",
+ note:"Beyond = «за пределами». Beyond my control = «вне моего контроля». Девиз говорят в шутку перед смелым делом.",
+ w:[["infinity","бесконечность"],["beyond","за пределами"]],yt:"Toy Story Buzz to infinity and beyond",
+ t:[["Друзья с энтузиазмом отправляются в поход",1,"Подходит: шутливый девиз."],["Вы сообщаете плохие новости",0,"Неуместно."],["Вы пишете официальное письмо",0,"Слишком шутливо."]],
+ gp:["The problem is ___ my control.",["beyond","behind","between"]]},
+{id:"sp1",sh:"sponge",who:"Губка Боб",lvl:"A2",q:1,ti:"Когда вы готовы на все сто",
+ sit:"Губка Боб обожает свою работу в «Красти Крабе» и каждый день начинает с восторженного крика.",
+ line:"I'm ready!",ru:"Я готов!",
+ note:"Ready = «готов». Ready for + существительное: ready for the exam. Ready to + глагол: ready to go.",
+ w:[["ready","готовый"]],yt:"SpongeBob I'm ready",
+ t:[["Учитель спрашивает, можно ли начинать тест, а вы готовы",1,"Подходит."],["Вы ещё не собрались",0,"Противоречит смыслу."],["Вы прощаетесь перед сном",0,"Не по смыслу."]],
+ gp:["Are you ready ___ the exam?",["for","to","at"]]},
+{id:"st1",sh:"st",who:"Одиннадцать",lvl:"A2",q:1,ti:"Когда напоминаете о честности",
+ sit:"Одиннадцать, девочка с особыми способностями, учится у новых друзей жизни. Одно правило она запоминает лучше всех.",
+ line:"Friends don't lie.",ru:"Друзья не врут.",
+ note:"Present Simple для общих правил: Friends don't lie. Отрицание с подлежащим во множественном числе — don't.",
+ w:[["lie","врать"],["friend","друг"]],yt:"Stranger Things friends don't lie",
+ t:[["Друг признаётся, что соврал вам, и вы напоминаете об уговоре",1,"Подходит."],["Вы описываете фильм в эссе",0,"Не по смыслу."],["Вы хвалите друга за честность",0,"Фраза звучит как упрёк, а не как похвала."]],
+ gp:["Cats ___ like water.",["don't","doesn't","not"]]},
+{id:"lo1",sh:"lotr",who:"Гэндальф",lvl:"B1",q:1,ti:"Когда кого-то не пускаете",
+ sit:"Гэндальф на узком мосту в Мории преграждает путь огненному чудовищу, чтобы спасти друзей.",
+ line:"You shall not pass!",ru:"Ты не пройдёшь!",
+ note:"Shall — старинная, торжественная форма будущего: you shall not = you will not. Сегодня shall живёт в вопросах-предложениях: Shall we go?",
+ w:[["shall","будет (торж.)"],["pass","пройти"]],yt:"Lord of the Rings You shall not pass",
+ t:[["Младший брат пытается пробраться в вашу комнату, и вы шутливо загораживаете дверь",1,"Подходит: шуточная отсылка."],["Вы приглашаете гостя войти",0,"Противоречит смыслу."],["Вы сдаёте экзамен",0,"Pass the exam — другое значение."]],
+ gp:["___ we start the lesson?",["Shall","Will","Do"]]},
+{id:"sm1",sh:"spider",who:"Дядя Бен",lvl:"B2",q:1,ti:"Когда сила требует ответственности",
+ sit:"Дядя Бен даёт Питеру Паркеру совет, который станет главным принципом героя.",
+ line:"With great power comes great responsibility.",ru:"С большой силой приходит большая ответственность.",
+ note:"Обратный порядок слов: обстоятельство в начале, потом глагол и подлежащее (With … comes …). Так звучит торжественно, как пословица.",
+ w:[["power","сила, власть"],["responsibility","ответственность"]],yt:"Spider-Man with great power comes great responsibility",
+ t:[["Друга назначили старостой, и вы напоминаете ему об обязанностях",1,"Подходит."],["Вы рассказываете рецепт",0,"Не по смыслу."],["Вы извиняетесь за опоздание",0,"Не по смыслу."]],
+ gp:["With great power ___ great responsibility.",["comes","come","coming"]]},
+{id:"kp1",sh:"panda",who:"Мистер Пинг",lvl:"B1",q:1,ti:"Когда секрет — в тебе самом",
+ sit:"Отец По раскрывает секрет своего знаменитого супа. Именно это помогает По понять главное о себе.",
+ line:"There is no secret ingredient.",ru:"Нет никакого секретного ингредиента.",
+ note:"There is no + существительное = «нет никакого». Ingredient = «ингредиент». Фраза о том, что успех зависит от веры в себя, а не от волшебства.",
+ w:[["secret","секретный"],["ingredient","ингредиент"]],yt:"Kung Fu Panda there is no secret ingredient",
+ t:[["Друг ищет «волшебный способ» выучить английский за неделю",1,"Подходит: успех в усилиях, а не в секрете."],["Вы делитесь настоящим секретным рецептом",0,"Противоречит смыслу."],["Вы покупаете продукты",0,"Не по смыслу."]],
+ gp:["There ___ no easy way.",["is","are","be"]]},
+{id:"sw1",sh:"sw",who:"Джедаи",lvl:"B1",q:1,ti:"Когда желаете удачи",
+ sit:"Прощаясь перед опасным делом, герои «Звёздных войн» желают друг другу силы.",
+ line:"May the Force be with you.",ru:"Да пребудет с тобой Сила.",
+ note:"May + подлежащее + глагол — пожелание: May you be happy. Официально и торжественно; в жизни чаще говорят Good luck!",
+ w:[["may","пусть (пожелание)"],["force","сила"]],yt:"Star Wars May the Force be with you",
+ t:[["Друг-фанат идёт на экзамен",1,"Подходит: шутливое пожелание удачи."],["Вы ругаете кого-то",0,"Это доброе пожелание."],["Вы спрашиваете дорогу",0,"Не по смыслу."]],
+ gp:["___ all your dreams come true!",["May","Can","Must"]]},
+{id:"fr1",sh:"friends",who:"Росс",lvl:"B1",q:1,ti:"Когда оправдываетесь паузой",
+ sit:"Росс годами оправдывается одной фразой: в тот момент у них с Рэйчел был перерыв в отношениях.",
+ line:"We were on a break!",ru:"У нас был перерыв!",
+ note:"On a break = «на перерыве» (в отношениях или на работе). Take a break = «сделать перерыв».",
+ w:[["break","перерыв"],["take a break","сделать перерыв"]],yt:"Friends Ross we were on a break",
+ t:[["Друзья-фанаты сериала спорят, кто прав, и вы цитируете Росса",1,"Подходит как шутка."],["Вы пишете начальнику",0,"Не по смыслу."],["Вы рассказываете о каникулах",0,"Говорят on holiday."]],
+ gp:["Let's ___ a break.",["take","make","do"]]},
+{id:"gf1",sh:"gf",who:"Дядя Стэн",lvl:"B1",q:0,ti:"Когда оправдываете сомнительную затею",
+ sit:"Дядя Стэн управляет «Хижиной чудес» и продаёт туристам поддельные диковинки. Себя он считает гениальным бизнесменом.",
+ line:"It's not a scam. It's a business.",ru:"Это не обман. Это бизнес.",
+ note:"Scam = «мошенничество, развод». Схема It's not X. It's Y — переименовать что-то в лучшую сторону.",
+ w:[["scam","обман, мошенничество"],["business","бизнес"]],yt:"Gravity Falls Grunkle Stan Mystery Shack",
+ t:[["Друг продаёт одноклассникам «волшебные» камни и шутит про себя",1,"Подходит: ирония."],["Вы описываете честную работу",0,"Фраза ироничная."],["Вы просите о помощи",0,"Не по смыслу."]],
+ gp:["Be careful, this website is a ___.",["scam","scum","scan"]]}
+];
+
+var VIDS={in1:["C4BPUrYq0S8",1],wi1:["j45Tp9SXkk8",1],hp1:["38ItyyiEiAc",1],hp2:["V3fCj5MU6Tw",1],hp3:["1c_2JrrA8kw",1],ug1:["BH57XnUEBxs",1],sh1:["-FtCTW2rVFM",1],ty1:["LdMb9D9WF5k",1],sp1:["G7MoXPxA5LM",1],st1:["GhRE84oAfAY",1],lo1:["GwmJ76VjXaE",1],sm1:["guuYU74wU70",1],kp1:["KfwTk1ngHQs",1],sw1:["pOVnogzqkXw",1],fr1:["bqydL-OQ6eQ",1],gb1:["JS4--ccaQxc",0]};
+
+var IC={
+ flame:'<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--flame)"><path d="M12 2c1 3.5 5 5.6 5 10.5A5 5 0 0 1 12 22a5 5 0 0 1-5-5c0-2.6 1.5-4 2.5-5.5.3 1.6 1 2.5 2 2.8C11 11 11 6 12 2z"/></svg>',
+ bolt:'<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--gold)"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+ play:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+ spk:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+ slow:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16c0-4 3-7 7-7s7 3 7 7H3z"/><path d="M17 16h2.5a1.5 1.5 0 0 0 0-3H17M7 16v3M13 16v3"/></svg>',
+ back:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+ check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+ save:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>',
+ saved:'<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h12v18l-6-4-6 4z"/></svg>',
+ feed:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="11" rx="2.5"/><path d="M10 7.5v4l3.5-2z" fill="currentColor"/><path d="M3 19h18" stroke-linecap="round"/></svg>',
+ shows:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>',
+ ext:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>'
+};
+var LV=["A2","B1","B2","C1"],LVN={A2:"A2 · Band 3–4",B1:"B1 · Band 4.5–5",B2:"B2 · Band 5.5–6.5",C1:"C1 · Band 7+"};
+var $=function(s){return document.querySelector(s)};
+var app=$("#app"),nav=$("#nav");
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function toTop(){window.scrollTo(0,0)}
+var KEY="linebyline-v1";
+function fresh(){return {lvl:null,done:{},saved:{},xp:0,streak:0,last:null}}
+var S=fresh();try{var r=localStorage.getItem(KEY);if(r)S=Object.assign(fresh(),JSON.parse(r))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function ds(d){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function streak(){var t=ds(new Date()),y=ds(new Date(Date.now()-864e5));return (S.last===t||S.last===y)?S.streak:0}
+function addXP(n){var t=ds(new Date()),y=ds(new Date(Date.now()-864e5));S.xp+=n;if(S.last!==t){S.streak=S.last===y?S.streak+1:1;S.last=t}save()}
+var canSpeak="speechSynthesis" in window;
+function speak(t,rate){if(!canSpeak)return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t.replace(/-/g,""));u.lang="en-GB";u.rate=rate||.95;var vs=speechSynthesis.getVoices();var v=vs.filter(function(v){return /^en[-_]GB/i.test(v.lang)})[0]||vs.filter(function(v){return /^en/i.test(v.lang)})[0];if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+try{if(canSpeak)speechSynthesis.getVoices()}catch(e){}
+var ac=null;
+function tone(ok){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();(ok?[660,880]:[300,220]).forEach(function(f,k){var o=ac.createOscillator(),g=ac.createGain(),t0=ac.currentTime+k*.11;o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(.15,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+.18);o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+.2)})}catch(e){}}
+function yt(s){var v=VIDS[s.id];return v?"https://www.youtube.com/watch?v="+v[0]:"https://www.youtube.com/results?search_query="+encodeURIComponent(s.yt)}
+var SANDBOX=/claude|anthropic/i.test(location.hostname)||location.protocol==="file:"||location.protocol==="content:";
+function player(s){var v=VIDS[s.id];
+ if(v&&!SANDBOX)return '<div class="pwrap" id="pw"><button class="pstart" id="pst" style="--c1:'+SHOWS[s.sh].c[0]+';--c2:'+SHOWS[s.sh].c[1]+'"><span class="pbig">'+IC.play+'</span><span>Смотреть сцену</span><span class="note2">'+(v[1]?"Точный момент с этой репликой":"Подборка моментов с этим персонажем")+'</span></button></div><a class="ytl" href="'+yt(s)+'" target="_blank" rel="noopener">Не играет? Открыть на YouTube '+IC.ext+'</a>';
+ return thumb(s,true)+'<a class="ytb" href="'+yt(s)+'" target="_blank" rel="noopener">'+IC.play+'<span>'+(v?(SANDBOX?"Смотреть сцену на YouTube":"Смотреть"):"Найти сцену на YouTube")+'</span>'+IC.ext+"</a>"+(v&&SANDBOX?'<p class="note" style="margin-top:8px">Внутри Claude плеер заблокирован. На своём сайте (GitHub Pages) видео будет играть прямо здесь.</p>':"")}
+function li(l){return LV.indexOf(l)}
+
+/* ---------- nav ---------- */
+function showNav(tab){nav.hidden=false;var n=Object.keys(S.saved).length;
+ nav.innerHTML='<div class="in">'+[["feed","Лента",IC.feed],["shows","Сериалы",IC.shows],["saved","Мои фразы"+(n?" · "+n:""),IC.save]].map(function(x){return '<button class="tab'+(x[0]===tab?" on":"")+'" data-t="'+x[0]+'">'+x[2]+"<span>"+x[1]+"</span></button>"}).join("")+"</div>";
+ nav.querySelectorAll(".tab").forEach(function(b){b.onclick=function(){var t=b.dataset.t;if(t==="feed"){FILTER="me";feed()}else if(t==="shows")showsTab();else savedTab()}})}
+function topBar(){return '<div class="top"><div class="brand">Line<b>by</b>Line</div><div class="stats"><span class="chip" id="lvch">'+(S.lvl||"")+'</span><span class="stat">'+IC.flame+streak()+'</span><span class="stat">'+IC.bolt+S.xp+"</span></div></div>"}
+function wireTop(){var c=$("#lvch");if(c)c.onclick=pickLevel}
+
+/* ---------- onboarding ---------- */
+function pickLevel(){
+ nav.hidden=true;
+ app.innerHTML='<div class="hero"><div class="brand big">Line<b>by</b>Line</div><h1>Английский по любимым мультфильмам и сериалам</h1><p>Сцена, реплика персонажа и задача: где эту фразу можно сказать в жизни, а где она прозвучит странно.</p></div><div class="tlabel" style="margin-top:22px">Ваш уровень</div><div class="lvls">'+LV.map(function(l){return '<button class="lvb'+(S.lvl===l?" on":"")+'" data-l="'+l+'"><b>'+l+"</b><span>"+LVN[l].split(" · ")[1]+"</span></button>"}).join("")+'</div><p class="note" style="margin-top:14px">Лента подберёт сцены вашего уровня и на ступень выше. Уровень можно сменить в любой момент, нажав на значок вверху.</p>';
+ app.querySelectorAll(".lvb").forEach(function(b){b.onclick=function(){S.lvl=b.dataset.l;save();FILTER="me";feed()}});toTop();
+}
+
+/* ---------- feed ---------- */
+var FILTER="me",LIST=[];
+function feedList(){
+ var a;
+ if(FILTER==="me")a=SC.filter(function(s){return li(s.lvl)<=li(S.lvl)+1});
+ else if(FILTER==="all")a=SC.slice();
+ else a=SC.filter(function(s){return s.sh===FILTER});
+ var undone=a.filter(function(s){return !S.done[s.id]}),done=a.filter(function(s){return S.done[s.id]});
+ if(FILTER==="me"||FILTER==="all"){
+  var by={};shuf(undone).forEach(function(s){(by[s.sh]=by[s.sh]||[]).push(s)});
+  undone.sort(function(x,y){return Math.abs(li(x.lvl)-li(S.lvl))-Math.abs(li(y.lvl)-li(S.lvl))});
+  var keys=Object.keys(by),out=[],k=0;
+  keys.forEach(function(key){by[key].sort(function(x,y){return Math.abs(li(x.lvl)-li(S.lvl))-Math.abs(li(y.lvl)-li(S.lvl))})});
+  keys=shuf(keys);
+  while(out.length<undone.length){var key=keys[k%keys.length];if(by[key].length)out.push(by[key].shift());k++}
+  undone=out;
+ }
+ return undone.concat(done);
+}
+function thumb(s,big){var sh=SHOWS[s.sh];
+ return '<div class="thumb'+(big?" big":"")+'" style="--c1:'+sh.c[0]+';--c2:'+sh.c[1]+'"><div class="tshow">'+esc(sh.t)+'</div><div class="tline" lang="en">'+esc(s.line)+'</div><div class="tbadges"><span class="tb">'+s.lvl+"</span>"+(S.done[s.id]?'<span class="tb ok">'+IC.check+" пройдено</span>":"")+'</div>'+(big?"":'<span class="tplay">'+IC.play+"</span>")+(!big&&VIDS[s.id]?'<span class="tb vid">видео</span>':"")+"</div>"}
+function feed(){
+ if(!S.lvl)return pickLevel();
+ showNav("feed");LIST=feedList();
+ var chips=[["me","Для меня"],["all","Все"]].concat(Object.keys(SHOWS).map(function(k){return [k,SHOWS[k].t]}));
+ var doneN=SC.filter(function(s){return S.done[s.id]}).length;
+ app.innerHTML=topBar()+'<div class="chips" role="tablist">'+chips.map(function(c){return '<button class="fchip'+(c[0]===FILTER?" on":"")+'" data-f="'+c[0]+'">'+esc(c[1])+"</button>"}).join("")+'</div><p class="note" style="margin-block:2px 14px">Пройдено сцен: '+doneN+" из "+SC.length+'</p><div class="grid">'+LIST.map(function(s){var sh=SHOWS[s.sh];return '<button class="card" data-id="'+s.id+'">'+thumb(s)+'<div class="cmeta"><div class="ctitle">'+esc(s.ti)+'</div><div class="csub">'+esc(sh.t)+" · "+esc(s.who)+" · "+(s.q?"цитата":"фраза для урока")+"</div></div></button>"}).join("")+"</div>"+(LIST.length?"":'<p class="note">Здесь пока пусто.</p>');
+ wireTop();
+ app.querySelectorAll(".fchip").forEach(function(b){b.onclick=function(){FILTER=b.dataset.f;feed()}});
+ var on=app.querySelector(".fchip.on");if(on&&on.scrollIntoView)on.scrollIntoView({block:"nearest",inline:"center"});
+ app.querySelectorAll(".card").forEach(function(b){b.onclick=function(){scene(b.dataset.id)}});
+ toTop();
+}
+
+/* ---------- scene ---------- */
+function scene(id){
+ var s=SC.filter(function(x){return x.id===id})[0],sh=SHOWS[s.sh];
+ nav.hidden=true;
+ var st={t1:null,t2:null};
+ var opts1=shuf(s.t.map(function(o,i){return {txt:o[0],ok:o[1],ex:o[2],i:i}}));
+ var opts2=shuf(s.gp[1]);
+ function render(){
+  var solved=st.t1!=null&&st.t2!=null;
+  app.innerHTML='<div class="lh"><button class="x" id="back" aria-label="Назад">'+IC.back+'</button><span class="note">'+esc(sh.t)+'</span><button class="x sv'+(S.saved[s.id]?" on":"")+'" id="sv" aria-label="Сохранить фразу">'+(S.saved[s.id]?IC.saved:IC.save)+"</button></div>"+player(s)+
+  '<div class="sec"><div class="tlabel">Сцена · '+esc(s.who)+'</div><p class="sit">'+esc(s.sit)+"</p></div>"+
+  '<div class="linebox"><div class="ltag">'+(s.q?"Цитата из "+(s.sh==="hp"||s.sh==="shrek"||s.sh==="toy"||s.sh==="lotr"||s.sh==="spider"||s.sh==="panda"||s.sh==="sw"?"фильма":"сериала"):"Фраза для урока в духе сцены")+'</div><div class="lline" lang="en">'+esc(s.line)+'</div><div class="lctl">'+(canSpeak?'<button class="mini" id="sp" aria-label="Прослушать">'+IC.spk+'</button><button class="mini" id="sps" aria-label="Медленно">'+IC.slow+"</button>":"")+'<button class="lnk" id="trb">'+(st.tr?"Скрыть перевод":"Показать перевод")+'</button></div><div class="ltr" '+(st.tr?"":"hidden")+">"+esc(s.ru)+"</div></div>"+
+  '<div class="sec"><div class="tlabel">Разбор</div><p>'+esc(s.note)+'</p><div class="gl">'+s.w.map(function(w){return '<div class="gr"><span lang="en">'+esc(w[0])+"</span><span>"+esc(w[1])+"</span></div>"}).join("")+"</div></div>"+
+  '<div class="sec"><div class="tlabel">Задача 1 · Где это уместно?</div><p class="qq">В какой ситуации эту фразу естественно сказать?</p><div class="opts">'+opts1.map(function(o,k){var cls="";if(st.t1!=null){cls=o.ok?"ok":(k===st.t1?"bad":"dim")}return '<button class="opt '+cls+'" data-k="'+k+'" '+(st.t1!=null?"disabled":"")+'><span class="otx">'+esc(o.txt)+"</span>"+(st.t1!=null?'<span class="oex">'+esc(o.ex)+"</span>":"")+"</button>"}).join("")+"</div></div>"+
+  (st.t1!=null?'<div class="sec"><div class="tlabel">Задача 2 · Закрепим</div><p class="qq" lang="en">'+esc(s.gp[0]).split("___").join('<span class="gap">'+(st.t2!=null?esc(s.gp[1][0]):"&nbsp;")+"</span>")+'</p><div class="opts row3">'+opts2.map(function(o,k){var cls="";if(st.t2!=null){cls=o===s.gp[1][0]?"ok":(k===st.t2?"bad":"dim")}return '<button class="opt c '+cls+'" data-k2="'+k+'" '+(st.t2!=null?"disabled":"")+">"+esc(o)+"</button>"}).join("")+"</div></div>":"")+
+  (solved?'<div class="done"><div class="dh">'+(st.score===2?"Отлично, обе задачи верно!":st.score===1?"Одна из двух — тоже прогресс.":"Ничего, разбор выше поможет запомнить.")+'</div><div class="note">+'+st.xp+' XP</div><div class="stack"><button class="btn" id="next">Следующая сцена</button>'+(S.saved[s.id]?"":'<button class="btn ghost" id="sv2">Сохранить фразу</button>')+"</div></div>":"");
+  $("#back").onclick=function(){feed()};
+  var pst=$("#pst");if(pst)pst.onclick=function(){if(canSpeak)try{speechSynthesis.cancel()}catch(e){}st.playing=1;$("#pw").innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+VIDS[s.id][0]+'?autoplay=1&rel=0&playsinline=1" title="Сцена" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'};
+  if(st.playing){var pw=$("#pw");if(pw)pw.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+VIDS[s.id][0]+'?rel=0&playsinline=1" title="Сцена" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'}
+  $("#sv").onclick=toggleSave;var sv2=$("#sv2");if(sv2)sv2.onclick=toggleSave;
+  var sp=$("#sp");if(sp){sp.onclick=function(){speak(s.line)};$("#sps").onclick=function(){speak(s.line,.6)}}
+  $("#trb").onclick=function(){st.tr=!st.tr;var y=window.scrollY;render();window.scrollTo(0,y)};
+  app.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){st.t1=+b.dataset.k;var ok=opts1[st.t1].ok;tone(!!ok);var y=window.scrollY;render();window.scrollTo(0,y)}});
+  app.querySelectorAll("[data-k2]").forEach(function(b){b.onclick=function(){st.t2=+b.dataset.k2;var ok=opts2[st.t2]===s.gp[1][0];tone(ok);if(ok)speak(s.gp[0].replace("___",s.gp[1][0]));
+   st.score=(opts1[st.t1].ok?1:0)+(ok?1:0);var first=!S.done[s.id];st.xp=first?5+st.score*5:2;S.done[s.id]=1;addXP(st.xp);var y=window.scrollY;render();window.scrollTo(0,y)}});
+  var nx=$("#next");if(nx)nx.onclick=function(){LIST=feedList();var nxt=LIST.filter(function(x){return !S.done[x.id]})[0]||LIST.filter(function(x){return x.id!==s.id})[0];nxt?scene(nxt.id):feed()};
+ }
+ function toggleSave(){if(S.saved[s.id])delete S.saved[s.id];else S.saved[s.id]=Date.now();save();var y=window.scrollY;render();window.scrollTo(0,y)}
+ render();toTop();
+ if(canSpeak)setTimeout(function(){speak(s.line)},300);
+}
+
+/* ---------- shows ---------- */
+function showsTab(){
+ showNav("shows");
+ app.innerHTML=topBar()+'<h1 class="h1s">Сериалы и фильмы</h1><p class="note" style="margin-bottom:16px">Выберите, чтобы смотреть сцены только оттуда.</p><div class="slist">'+Object.keys(SHOWS).map(function(k){var sh=SHOWS[k],all=SC.filter(function(s){return s.sh===k}),d=all.filter(function(s){return S.done[s.id]}).length;return '<button class="srow" data-k="'+k+'"><span class="sw" style="--c1:'+sh.c[0]+';--c2:'+sh.c[1]+'"></span><span class="sn"><b>'+esc(sh.t)+'</b><span class="note" lang="en">'+esc(sh.en)+'</span></span><span class="sc">'+d+"/"+all.length+"</span></button>"}).join("")+"</div>";
+ wireTop();
+ app.querySelectorAll(".srow").forEach(function(b){b.onclick=function(){FILTER=b.dataset.k;feed()}});toTop();
+}
+function savedTab(){
+ showNav("saved");
+ var ids=Object.keys(S.saved).sort(function(a,b){return S.saved[b]-S.saved[a]});
+ app.innerHTML=topBar()+'<h1 class="h1s">Мои фразы</h1>'+(ids.length?'<p class="note" style="margin-bottom:16px">Нажмите на фразу, чтобы услышать её; на название — чтобы открыть сцену.</p><div class="slist">'+ids.map(function(id){var s=SC.filter(function(x){return x.id===id})[0];if(!s)return "";return '<div class="phr"><button class="pl" data-s="'+esc(s.line)+'" lang="en">'+esc(s.line)+'</button><div class="note">'+esc(s.ru)+'</div><button class="lnk" data-id="'+s.id+'">'+esc(SHOWS[s.sh].t)+" · "+esc(s.ti)+" ›</button></div>"}).join("")+"</div>":'<div class="empty"><p>Здесь появятся фразы, которые вы сохраните.</p><p class="note">В сцене нажмите на закладку вверху справа или на «Сохранить фразу» после задач.</p><button class="btn" id="tofeed" style="margin-top:14px">Открыть ленту</button></div>');
+ wireTop();
+ app.querySelectorAll(".pl").forEach(function(b){b.onclick=function(){speak(b.dataset.s)}});
+ app.querySelectorAll(".lnk[data-id]").forEach(function(b){b.onclick=function(){scene(b.dataset.id)}});
+ var tf=$("#tofeed");if(tf)tf.onclick=function(){FILTER="me";feed()};toTop();
+}
+S.lvl?feed():pickLevel();
+
+})();
+</script>
+</body></html>
