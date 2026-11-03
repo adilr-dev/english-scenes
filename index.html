@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 <title>Line by Line</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Golos+Text:wght@400;500;600;700&display=swap">
-<style>body{margin:0}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}/* Layout: video-feed column — 16:9 scene "thumbnails" built from type on show-tinted gradients, scene page = thumbnail, YouTube link, line box, breakdown, two tasks; bottom tab bar */
+<style>/* Layout: video-feed column — 16:9 scene "thumbnails" built from type on show-tinted gradients, scene page = thumbnail, YouTube link, line box, breakdown, two tasks; bottom tab bar */
 :root{
   --bg:#0F1117; --surface:#181B24; --raise:#222634; --ink:#ECEEF4; --muted:#9AA0B2; --line:#2A2F3E;
   --accent:#FF5A4E; --accent-d:#C63A30; --accent-bg:#3A1C1E; --on:#FFFFFF;
@@ -128,7 +129,21 @@ svg{display:block;flex:none}
 .note2{font-size:13px;font-weight:500;opacity:.9}
 .ytl{display:inline-flex;gap:6px;align-items:center;margin-top:10px;color:var(--muted);font-size:14px}
 .tb.vid{position:absolute;left:52px;bottom:14px;background:var(--accent)}
-</style></head><body>
+
+.pwrap #ytp,.pwrap iframe{width:100%;height:100%;border:0;display:block}
+.pctl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.pctl .btn{width:auto}
+.btn.small{padding:10px 14px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:default}
+.perr{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#fff;background:#222}
+.own{margin-top:14px;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+.own summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.own p{margin:8px 0}
+.ownrow{display:flex;gap:8px}
+.ownrow input{flex:1;min-width:0;border:2px solid var(--line);border-radius:10px;padding:10px 12px;font:500 15px var(--body);background:var(--bg);color:var(--ink)}
+.ownrow .btn{width:auto}
+</style>
+</head><body>
 <div id="app"><div class="hero"><div class="brand big">Line<b>by</b>Line</div><h1>Загрузка…</h1><p id="err" class="note"></p></div></div>
 <nav id="nav" class="nav" hidden></nav>
 <script>window.onerror=function(m,s,l){var e=document.getElementById("err");if(e)e.textContent="Ошибка: "+m+" (строка "+l+")"};</script>
@@ -489,7 +504,7 @@ var SC=[
  gp:["Be careful, this website is a ___.",["scam","scum","scan"]]}
 ];
 
-var VIDS={in1:["C4BPUrYq0S8",1],wi1:["j45Tp9SXkk8",1],hp1:["38ItyyiEiAc",1],hp2:["V3fCj5MU6Tw",1],hp3:["1c_2JrrA8kw",1],ug1:["BH57XnUEBxs",1],sh1:["-FtCTW2rVFM",1],ty1:["LdMb9D9WF5k",1],sp1:["G7MoXPxA5LM",1],st1:["GhRE84oAfAY",1],lo1:["GwmJ76VjXaE",1],sm1:["guuYU74wU70",1],kp1:["KfwTk1ngHQs",1],sw1:["pOVnogzqkXw",1],fr1:["bqydL-OQ6eQ",1],gb1:["JS4--ccaQxc",0]};
+var VIDS={in1:["C4BPUrYq0S8",1],wi1:["j45Tp9SXkk8",1],hp1:["38ItyyiEiAc",1],hp2:["V3fCj5MU6Tw",1],hp3:["1c_2JrrA8kw",1],ug1:["BH57XnUEBxs",1],sh1:["-FtCTW2rVFM",1],ty1:["LdMb9D9WF5k",1],sp1:["G7MoXPxA5LM",1],st1:["GhRE84oAfAY",1],lo1:["GwmJ76VjXaE",1],sm1:["guuYU74wU70",1],kp1:["KfwTk1ngHQs",1],sw1:["pOVnogzqkXw",1],fr1:["bqydL-OQ6eQ",1]};
 
 var IC={
  flame:'<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--flame)"><path d="M12 2c1 3.5 5 5.6 5 10.5A5 5 0 0 1 12 22a5 5 0 0 1-5-5c0-2.6 1.5-4 2.5-5.5.3 1.6 1 2.5 2 2.8C11 11 11 6 12 2z"/></svg>',
@@ -512,7 +527,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 function toTop(){window.scrollTo(0,0)}
 var KEY="linebyline-v1";
-function fresh(){return {lvl:null,done:{},saved:{},xp:0,streak:0,last:null}}
+function fresh(){return {lvl:null,done:{},saved:{},xp:0,streak:0,last:null,marks:{},links:{}}}
 var S=fresh();try{var r=localStorage.getItem(KEY);if(r)S=Object.assign(fresh(),JSON.parse(r))}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function ds(d){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
@@ -523,11 +538,6 @@ function speak(t,rate){if(!canSpeak)return;try{speechSynthesis.cancel();var u=ne
 try{if(canSpeak)speechSynthesis.getVoices()}catch(e){}
 var ac=null;
 function tone(ok){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();(ok?[660,880]:[300,220]).forEach(function(f,k){var o=ac.createOscillator(),g=ac.createGain(),t0=ac.currentTime+k*.11;o.frequency.value=f;g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(.15,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+.18);o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+.2)})}catch(e){}}
-function yt(s){var v=VIDS[s.id];return v?"https://www.youtube.com/watch?v="+v[0]:"https://www.youtube.com/results?search_query="+encodeURIComponent(s.yt)}
-var SANDBOX=/claude|anthropic/i.test(location.hostname)||location.protocol==="file:"||location.protocol==="content:";
-function player(s){var v=VIDS[s.id];
- if(v&&!SANDBOX)return '<div class="pwrap" id="pw"><button class="pstart" id="pst" style="--c1:'+SHOWS[s.sh].c[0]+';--c2:'+SHOWS[s.sh].c[1]+'"><span class="pbig">'+IC.play+'</span><span>Смотреть сцену</span><span class="note2">'+(v[1]?"Точный момент с этой репликой":"Подборка моментов с этим персонажем")+'</span></button></div><a class="ytl" href="'+yt(s)+'" target="_blank" rel="noopener">Не играет? Открыть на YouTube '+IC.ext+'</a>';
- return thumb(s,true)+'<a class="ytb" href="'+yt(s)+'" target="_blank" rel="noopener">'+IC.play+'<span>'+(v?(SANDBOX?"Смотреть сцену на YouTube":"Смотреть"):"Найти сцену на YouTube")+'</span>'+IC.ext+"</a>"+(v&&SANDBOX?'<p class="note" style="margin-top:8px">Внутри Claude плеер заблокирован. На своём сайте (GitHub Pages) видео будет играть прямо здесь.</p>':"")}
 function li(l){return LV.indexOf(l)}
 
 /* ---------- nav ---------- */
@@ -564,7 +574,7 @@ function feedList(){
  return undone.concat(done);
 }
 function thumb(s,big){var sh=SHOWS[s.sh];
- return '<div class="thumb'+(big?" big":"")+'" style="--c1:'+sh.c[0]+';--c2:'+sh.c[1]+'"><div class="tshow">'+esc(sh.t)+'</div><div class="tline" lang="en">'+esc(s.line)+'</div><div class="tbadges"><span class="tb">'+s.lvl+"</span>"+(S.done[s.id]?'<span class="tb ok">'+IC.check+" пройдено</span>":"")+'</div>'+(big?"":'<span class="tplay">'+IC.play+"</span>")+(!big&&VIDS[s.id]?'<span class="tb vid">видео</span>':"")+"</div>"}
+ return '<div class="thumb'+(big?" big":"")+'" style="--c1:'+sh.c[0]+';--c2:'+sh.c[1]+'"><div class="tshow">'+esc(sh.t)+'</div><div class="tline" lang="en">'+esc(s.line)+'</div><div class="tbadges"><span class="tb">'+s.lvl+"</span>"+(S.done[s.id]?'<span class="tb ok">'+IC.check+" пройдено</span>":"")+'</div>'+(big?"":'<span class="tplay">'+IC.play+"</span>")+(!big&&vidFor(s)?'<span class="tb vid">видео</span>':"")+"</div>"}
 function feed(){
  if(!S.lvl)return pickLevel();
  showNav("feed");LIST=feedList();
@@ -579,34 +589,64 @@ function feed(){
 }
 
 /* ---------- scene ---------- */
+function fmtT(t){t=Math.max(0,Math.round(t));return Math.floor(t/60)+":"+("0"+t%60).slice(-2)}
+function parseYT(u){u=String(u||"").trim();var m=u.match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/)||u.match(/^([A-Za-z0-9_-]{11})$/);if(!m)return null;
+ var t=0,q=u.match(/[?&#](?:t|start)=([0-9hms]+)/);if(q){var x=q[1];if(/^\d+$/.test(x))t=+x;else{var h=x.match(/(\d+)h/),mm=x.match(/(\d+)m/),ss=x.match(/(\d+)s/);t=(h?+h[1]*3600:0)+(mm?+mm[1]*60:0)+(ss?+ss[1]:0)}}
+ return {v:m[1],t:t}}
+function vidFor(s){var own=S.links[s.id];if(own)return {v:own.v,t:S.marks[s.id]!=null?S.marks[s.id]:own.t||0,own:1};var v=VIDS[s.id];if(v)return {v:v[0],t:S.marks[s.id]!=null?S.marks[s.id]:0,exact:v[1]};return null}
+function yt(s){var f=vidFor(s);return f?"https://www.youtube.com/watch?v="+f.v+(f.t?"&t="+f.t+"s":""):"https://www.youtube.com/results?search_query="+encodeURIComponent(s.yt)}
+var SANDBOX=/claude|anthropic/i.test(location.hostname)||location.protocol==="file:"||location.protocol==="content:";
+var YTP=null,apiState=0,apiQueue=[];
+function withAPI(cb){if(apiState===2&&window.YT&&YT.Player)return cb();apiQueue.push(cb);if(apiState)return;apiState=1;
+ var prev=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=function(){apiState=2;if(prev)try{prev()}catch(e){}var q=apiQueue;apiQueue=[];q.forEach(function(f){f()})};
+ var sc=document.createElement("script");sc.src="https://www.youtube.com/iframe_api";sc.onerror=function(){apiState=0;apiQueue=[];var pw=$("#pw");if(pw)pw.innerHTML='<div class="perr">Плеер не загрузился. Откройте ролик по ссылке ниже.</div>'};document.head.appendChild(sc)}
+function playerHTML(s){
+ var f=vidFor(s),h="";
+ if(f&&!SANDBOX){
+  h='<div class="pwrap" id="pw"><button class="pstart" id="pst" style="--c1:'+SHOWS[s.sh].c[0]+';--c2:'+SHOWS[s.sh].c[1]+'"><span class="pbig">'+IC.play+'</span><span>Смотреть сцену</span><span class="note2">'+(f.own?"Ваше видео":"")+(f.t?" с "+fmtT(f.t):" с начала ролика")+"</span></button></div>"+
+  '<div class="pctl"><button class="btn ghost small" id="mk" disabled>Момент начинается здесь</button><a class="ytl" href="'+yt(s)+'" target="_blank" rel="noopener">Открыть на YouTube '+IC.ext+'</a></div><p class="note" id="mknote">'+(S.marks[s.id]!=null?"Сохранённое начало: "+fmtT(S.marks[s.id])+".":"Запустите видео и нажмите кнопку там, где начинается сцена: в следующий раз ролик откроется с этого места, с запасом 4 секунды для контекста.")+"</p>";
+ }else{
+  h=thumb(s,true)+'<a class="ytb" href="'+yt(s)+'" target="_blank" rel="noopener">'+IC.play+"<span>"+(f?"Смотреть на YouTube"+(f.t?" с "+fmtT(f.t):""):"Найти сцену на YouTube")+"</span>"+IC.ext+"</a>"+(f&&SANDBOX?'<p class="note" style="margin-top:8px">Внутри Claude плеер заблокирован. На вашем сайте GitHub Pages видео играет прямо здесь.</p>':"");
+ }
+ h+='<details class="own"'+(f?"":" open")+'><summary>'+(f?"Заменить видео своей ссылкой":"Видео для этой сцены пока нет. Вставьте свою ссылку")+'</summary><p class="note">Найдите момент на YouTube, нажмите «Поделиться» → «Копировать ссылку» и вставьте сюда. Если в ссылке есть время (например, ?t=83), ролик начнётся с него.</p><div class="ownrow"><input id="ownu" type="url" inputmode="url" placeholder="https://youtu.be/…" autocomplete="off"><button class="btn small" id="owns">Сохранить</button></div><p class="note" id="ownmsg"></p>'+(S.links[s.id]?'<button class="lnk" id="ownd">Убрать мою ссылку</button>':"")+"</details>";
+ return h}
+function wirePlayer(s,rebuild){
+ var pst=$("#pst");
+ if(pst)pst.onclick=function(){if(canSpeak)try{speechSynthesis.cancel()}catch(e){}var f=vidFor(s);$("#pw").innerHTML='<div id="ytp"></div>';
+  withAPI(function(){try{YTP=new YT.Player("ytp",{videoId:f.v,playerVars:{start:f.t||0,autoplay:1,rel:0,playsinline:1,modestbranding:1},events:{onReady:function(e){var mk=$("#mk");if(mk)mk.disabled=false;try{e.target.playVideo()}catch(x){}},onError:function(){var pw=$("#pw");if(pw)pw.innerHTML='<div class="perr">Автор ролика запретил встраивание. Откройте его по ссылке ниже или вставьте другую ссылку.</div>'}}})}catch(e){}})};
+ var mk=$("#mk");if(mk)mk.onclick=function(){if(!YTP||!YTP.getCurrentTime)return;var t=Math.max(0,Math.floor(YTP.getCurrentTime())-4);S.marks[s.id]=t;save();$("#mknote").textContent="Сохранено: сцена начнётся с "+fmtT(t)+" (на 4 секунды раньше, чтобы был понятен контекст).";var a=app.querySelector(".ytl");if(a)a.href=yt(s)};
+ var ou=$("#owns");if(ou)ou.onclick=function(){var p=parseYT($("#ownu").value);if(!p){$("#ownmsg").textContent="Это не похоже на ссылку YouTube. Скопируйте ссылку через кнопку «Поделиться».";return}
+  S.links[s.id]=p;delete S.marks[s.id];if(p.t)S.marks[s.id]=Math.max(0,p.t-4);save();rebuild()};
+ var od=$("#ownd");if(od)od.onclick=function(){delete S.links[s.id];delete S.marks[s.id];save();rebuild()};
+}
 function scene(id){
  var s=SC.filter(function(x){return x.id===id})[0],sh=SHOWS[s.sh];
- nav.hidden=true;
+ nav.hidden=true;YTP=null;
  var st={t1:null,t2:null};
  var opts1=shuf(s.t.map(function(o,i){return {txt:o[0],ok:o[1],ex:o[2],i:i}}));
  var opts2=shuf(s.gp[1]);
+ app.innerHTML='<div class="lh"><button class="x" id="back" aria-label="Назад">'+IC.back+'</button><span class="note">'+esc(sh.t)+'</span><button class="x sv" id="sv" aria-label="Сохранить фразу"></button></div><div id="phead"></div><div id="sbody"></div>';
+ function head(){$("#phead").innerHTML=playerHTML(s);wirePlayer(s,head)}
+ function svIcon(){var b=$("#sv");b.innerHTML=S.saved[s.id]?IC.saved:IC.save;b.classList.toggle("on",!!S.saved[s.id])}
  function render(){
-  var solved=st.t1!=null&&st.t2!=null;
-  app.innerHTML='<div class="lh"><button class="x" id="back" aria-label="Назад">'+IC.back+'</button><span class="note">'+esc(sh.t)+'</span><button class="x sv'+(S.saved[s.id]?" on":"")+'" id="sv" aria-label="Сохранить фразу">'+(S.saved[s.id]?IC.saved:IC.save)+"</button></div>"+player(s)+
-  '<div class="sec"><div class="tlabel">Сцена · '+esc(s.who)+'</div><p class="sit">'+esc(s.sit)+"</p></div>"+
-  '<div class="linebox"><div class="ltag">'+(s.q?"Цитата из "+(s.sh==="hp"||s.sh==="shrek"||s.sh==="toy"||s.sh==="lotr"||s.sh==="spider"||s.sh==="panda"||s.sh==="sw"?"фильма":"сериала"):"Фраза для урока в духе сцены")+'</div><div class="lline" lang="en">'+esc(s.line)+'</div><div class="lctl">'+(canSpeak?'<button class="mini" id="sp" aria-label="Прослушать">'+IC.spk+'</button><button class="mini" id="sps" aria-label="Медленно">'+IC.slow+"</button>":"")+'<button class="lnk" id="trb">'+(st.tr?"Скрыть перевод":"Показать перевод")+'</button></div><div class="ltr" '+(st.tr?"":"hidden")+">"+esc(s.ru)+"</div></div>"+
+  var solved=st.t1!=null&&st.t2!=null,film=["hp","shrek","toy","lotr","spider","panda","sw"].indexOf(s.sh)>=0;
+  $("#sbody").innerHTML='<div class="sec"><div class="tlabel">Сцена · '+esc(s.who)+'</div><p class="sit">'+esc(s.sit)+"</p></div>"+
+  '<div class="linebox"><div class="ltag">'+(s.q?"Цитата из "+(film?"фильма":s.id==="wi1"?"игры":"сериала"):"Фраза для урока в духе сцены")+'</div><div class="lline" lang="en">'+esc(s.line)+'</div><div class="lctl">'+(canSpeak?'<button class="mini" id="sp" aria-label="Прослушать">'+IC.spk+'</button><button class="mini" id="sps" aria-label="Медленно">'+IC.slow+"</button>":"")+'<button class="lnk" id="trb">'+(st.tr?"Скрыть перевод":"Показать перевод")+'</button></div><div class="ltr" '+(st.tr?"":"hidden")+">"+esc(s.ru)+"</div></div>"+
   '<div class="sec"><div class="tlabel">Разбор</div><p>'+esc(s.note)+'</p><div class="gl">'+s.w.map(function(w){return '<div class="gr"><span lang="en">'+esc(w[0])+"</span><span>"+esc(w[1])+"</span></div>"}).join("")+"</div></div>"+
   '<div class="sec"><div class="tlabel">Задача 1 · Где это уместно?</div><p class="qq">В какой ситуации эту фразу естественно сказать?</p><div class="opts">'+opts1.map(function(o,k){var cls="";if(st.t1!=null){cls=o.ok?"ok":(k===st.t1?"bad":"dim")}return '<button class="opt '+cls+'" data-k="'+k+'" '+(st.t1!=null?"disabled":"")+'><span class="otx">'+esc(o.txt)+"</span>"+(st.t1!=null?'<span class="oex">'+esc(o.ex)+"</span>":"")+"</button>"}).join("")+"</div></div>"+
   (st.t1!=null?'<div class="sec"><div class="tlabel">Задача 2 · Закрепим</div><p class="qq" lang="en">'+esc(s.gp[0]).split("___").join('<span class="gap">'+(st.t2!=null?esc(s.gp[1][0]):"&nbsp;")+"</span>")+'</p><div class="opts row3">'+opts2.map(function(o,k){var cls="";if(st.t2!=null){cls=o===s.gp[1][0]?"ok":(k===st.t2?"bad":"dim")}return '<button class="opt c '+cls+'" data-k2="'+k+'" '+(st.t2!=null?"disabled":"")+">"+esc(o)+"</button>"}).join("")+"</div></div>":"")+
   (solved?'<div class="done"><div class="dh">'+(st.score===2?"Отлично, обе задачи верно!":st.score===1?"Одна из двух — тоже прогресс.":"Ничего, разбор выше поможет запомнить.")+'</div><div class="note">+'+st.xp+' XP</div><div class="stack"><button class="btn" id="next">Следующая сцена</button>'+(S.saved[s.id]?"":'<button class="btn ghost" id="sv2">Сохранить фразу</button>')+"</div></div>":"");
-  $("#back").onclick=function(){feed()};
-  var pst=$("#pst");if(pst)pst.onclick=function(){if(canSpeak)try{speechSynthesis.cancel()}catch(e){}st.playing=1;$("#pw").innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+VIDS[s.id][0]+'?autoplay=1&rel=0&playsinline=1" title="Сцена" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'};
-  if(st.playing){var pw=$("#pw");if(pw)pw.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+VIDS[s.id][0]+'?rel=0&playsinline=1" title="Сцена" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>'}
-  $("#sv").onclick=toggleSave;var sv2=$("#sv2");if(sv2)sv2.onclick=toggleSave;
+  var sv2=$("#sv2");if(sv2)sv2.onclick=toggleSave;
   var sp=$("#sp");if(sp){sp.onclick=function(){speak(s.line)};$("#sps").onclick=function(){speak(s.line,.6)}}
-  $("#trb").onclick=function(){st.tr=!st.tr;var y=window.scrollY;render();window.scrollTo(0,y)};
-  app.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){st.t1=+b.dataset.k;var ok=opts1[st.t1].ok;tone(!!ok);var y=window.scrollY;render();window.scrollTo(0,y)}});
-  app.querySelectorAll("[data-k2]").forEach(function(b){b.onclick=function(){st.t2=+b.dataset.k2;var ok=opts2[st.t2]===s.gp[1][0];tone(ok);if(ok)speak(s.gp[0].replace("___",s.gp[1][0]));
-   st.score=(opts1[st.t1].ok?1:0)+(ok?1:0);var first=!S.done[s.id];st.xp=first?5+st.score*5:2;S.done[s.id]=1;addXP(st.xp);var y=window.scrollY;render();window.scrollTo(0,y)}});
+  $("#trb").onclick=function(){st.tr=!st.tr;render()};
+  $("#sbody").querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){st.t1=+b.dataset.k;tone(!!opts1[st.t1].ok);render()}});
+  $("#sbody").querySelectorAll("[data-k2]").forEach(function(b){b.onclick=function(){st.t2=+b.dataset.k2;var ok=opts2[st.t2]===s.gp[1][0];tone(ok);if(ok)speak(s.gp[0].replace("___",s.gp[1][0]));
+   st.score=(opts1[st.t1].ok?1:0)+(ok?1:0);var first=!S.done[s.id];st.xp=first?5+st.score*5:2;S.done[s.id]=1;addXP(st.xp);render()}});
   var nx=$("#next");if(nx)nx.onclick=function(){LIST=feedList();var nxt=LIST.filter(function(x){return !S.done[x.id]})[0]||LIST.filter(function(x){return x.id!==s.id})[0];nxt?scene(nxt.id):feed()};
  }
- function toggleSave(){if(S.saved[s.id])delete S.saved[s.id];else S.saved[s.id]=Date.now();save();var y=window.scrollY;render();window.scrollTo(0,y)}
- render();toTop();
+ function toggleSave(){if(S.saved[s.id])delete S.saved[s.id];else S.saved[s.id]=Date.now();save();svIcon();render()}
+ $("#back").onclick=function(){YTP=null;feed()};$("#sv").onclick=toggleSave;
+ svIcon();head();render();toTop();
  if(canSpeak)setTimeout(function(){speak(s.line)},300);
 }
 
